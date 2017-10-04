@@ -1,0 +1,264 @@
+<template>
+  <div class="center" id="content">
+    <status :status="results.status"></status>
+    <results :tours="filteredTours" v-show="results.tours.length"></results>
+    <filters :filterTabs="filterTabs" :tours="results.tours" v-show="results.tours.length" v-on:filtered="filtered"></filters>
+  </div>
+</template>
+<script>
+import { fakeTours } from './assets/fakeTours.js';
+
+import Results from './components/Results/Results.vue';
+import Status from './components/Status/Status.vue';
+import Filters from './components/Filters/Filters.vue';
+export default {
+    data() {
+        return {
+            results: {
+                status: {
+                    loading: true,
+                    error: false
+                },
+                tours: fakeTours
+            },
+            filteredTours: fakeTours.slice(),
+            filterTabs: {
+                name: {
+                    header: '',
+                    filtersInTab: {
+                        text: [
+                            {
+                                type: 'text',
+                                label: 'Название отеля',
+                                property: 'accommodationHotelName',
+                                placeholder: 'Искать отель по названию'
+                            }
+                        ]
+                    },
+                },
+                category: {
+                    header: 'Категория',
+                    filtersInTab: {
+                        category: [
+                            {
+                                type: 'category',
+                                label: '1',
+                                property: 'accommodationStars',
+                                value: 1
+                            },
+                            {
+                                type: 'category',
+                                label: '2',
+                                property: 'accommodationStars',
+                                value: 2
+                            },
+                            {
+                                type: 'category',
+                                label: '3',
+                                property: 'accommodationStars',
+                                value: 3
+                            },
+                            {
+                                type: 'category',
+                                label: '4',
+                                property: 'accommodationStars',
+                                value: 4
+                            },
+                            {
+                                type: 'category',
+                                label: '5',
+                                property: 'accommodationStars',
+                                value: 5
+                            },
+                            {
+                                type: 'category',
+                                label: '-',
+                                property: 'accommodationStars',
+                                value: 6
+                            },
+                            {
+                                type: 'category',
+                                label: 'Все',
+                                property: 'accommodationStars',
+                                value: 'all'
+                            }
+
+                        ]
+                    }
+                }
+            }
+        }
+    },
+    methods: {
+        filtered: function (filtered) {
+            this.filteredTours = filtered;
+        }
+    },
+    watch: {
+        results: {
+            handler: function(newResults){
+                this.filteredTours = newResults.tours;
+            },
+            deep: true
+        }
+    },
+    beforeMount() {
+        this.results.tours.forEach((el) => {
+            el.accommodationStars = parseInt(el.accommodationStars)
+        })
+    },
+    components: {
+        Results,
+        Status,
+        Filters
+    }
+}
+</script>
+
+<style>
+    .center {
+        position: relative;
+        width: 1280px;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 20px;
+        padding-right: 20px;
+        font-size: 16px;
+        font-family: PTSansRegular, sans-serif;
+    }
+    #content {
+        min-height: 400px;
+        padding-bottom: 30px;
+    }
+    #content.center {
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-justify-content: space-between;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        color: #333;
+    }
+    * {
+        box-sizing: border-box;
+    }
+
+    [class^="icon-"], [class*=" icon-"] {
+        /* use !important to prevent issues with browser extensions that change fonts */
+        font-family: 'onex-icons' !important;
+        speak: none;
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+        /* Better Font Rendering =========== */
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale; }
+
+    @font-face {
+        font-family: 'onex-icons';
+        src:  url('./assets/onex-icons/onex-icons.eot?c3fnk');
+        src:  url('./assets/onex-icons/onex-icons.eot?c3fnk#iefix') format('embedded-opentype'), url('./assets/onex-icons/onex-icons.ttf?c3fnk') format('truetype'), url('./assets/onex-icons/onex-icons.woff?c3fnk') format('woff'), url('./assets/onex-icons/onex-icons.svg?c3fnk#onex-icons') format('svg');
+        font-weight: normal;
+        font-style: normal;
+    }
+    /* font-family: "PTSansRegular"; */
+    @font-face {
+        font-family: "PTSansRegular";
+        src: url("./assets/PTSansRegular/PTSansRegular.eot");
+        src: url("./assets/PTSansRegular/PTSansRegular.eot?#iefix") format("embedded-opentype"), url("./assets/PTSansRegular/PTSansRegular.woff") format("woff"), url("./assets/PTSansRegular/PTSansRegular.ttf") format("truetype");
+        font-style: normal;
+        font-weight: normal;
+    }
+    /* font-family: "PTSansBold"; */
+    @font-face {
+        font-family: "PTSansBold";
+        src: url("./assets/PTSansBold/PTSansBold.eot");
+        src: url("./assets/PTSansBold/PTSansBold.eot?#iefix") format("embedded-opentype"), url("./assets/PTSansBold/PTSansBold.woff") format("woff"), url("./assets/PTSansBold/PTSansBold.ttf") format("truetype");
+        font-style: normal;
+        font-weight: normal;
+    }
+    /* font-family: "Ubuntu-Bold"; */
+    @font-face {
+        font-family: "Ubuntu-Bold";
+        src: url("./assets/Ubuntu/Ubuntu-Bold/Ubuntu-Bold.woff") format("woff"), url("./assets/Ubuntu/Ubuntu-Bold/Ubuntu-Bold.ttf") format("truetype"), url("./assets/Ubuntu/Ubuntu-Bold/Ubuntu-Bold.eot?#iefix") format("embedded-opentype");
+        font-weight: normal;
+        font-style: normal;
+    }
+    .icon-tour:before {
+        content: "\e953";
+    }
+    .icon-hotel:before {
+        content: "\e910";
+    }
+    .icon-plane:before {
+        content: "\e918";
+    }
+    .icon-star:before {
+        content: "\e91c";
+    }
+    .icon-marker:before {
+        content: "\e913";
+    }
+    .icon-exclamation-circled-inversed:before {
+        content: "\e92f";
+    }
+    .icon-arrow:before {
+        content: "\e901";
+    }
+
+    .btn {
+        position: relative;
+        display: -ms-inline-flexbox;
+        display: inline-flex;
+        -moz-align-items: center;
+        -ms-align-items: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        padding: 6px 12px;
+        margin-bottom: 0;
+        font-weight: 400;
+        line-height: 1.42857143;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        border: 0;
+        outline: 0;
+        text-align: center;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        background-image: none;
+        border-radius: 0.5rem;
+        box-shadow: 0 1px 4px -1px #000000;
+    }
+
+    input[type=checkbox] {
+        display: none;
+    }
+    input:checked ~ .checkbox:before {
+        background: url("./assets/check.png") #fff no-repeat 50%;
+    }
+    .checkbox {
+        position: relative;
+        cursor: pointer;
+    }
+    .checkbox:before {
+        position: absolute;
+        top: 0;
+        content: "";
+        width: 19px;
+        height: 19px;
+        color: #df5252;
+        background-color: #fff;
+        border: 1px solid #d8d8d8;
+        border-radius: 1px;
+    }
+</style>
