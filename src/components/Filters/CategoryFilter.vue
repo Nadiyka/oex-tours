@@ -16,11 +16,18 @@
             filter: {
                 type: Object,
                 required: true
-            }
+            },
+            forceAll: Boolean
         },
         methods: {
-            categoryFilter: function (event) {
+            categoryFilter: function () {
                 this.$emit('filter', this.filter.type, this.filter.property, this.filter.value, this.checked)
+            }
+        },
+        watch: {
+            forceAll(check) {
+                this.checked = check;
+                this.$emit('filter', this.filter.type, this.filter.property, this.filter.value, this.checked);
             }
         }
     }

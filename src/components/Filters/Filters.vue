@@ -2,7 +2,8 @@
     <div class="tour-aside">
         <filters-tab v-for="(tab, type) in filterTabs" :type="type" :header="tab.header" v-on:filter="filter">
             <text-filter v-for="textFilter in tab.filtersInTab.text" :filter="textFilter" v-on:filter="filter" slot="name"></text-filter>
-            <category-filter v-for="categoryFilter in tab.filtersInTab.category" :filter="categoryFilter" v-on:filter="filter" slot="category"></category-filter>
+            <category-filter v-for="categoryFilter in tab.filtersInTab.category" :filter="categoryFilter" v-on:filter="filter" slot="category" :force-all="allChecked"></category-filter>
+            <all-category-filter :all-checked="allChecked" slot="category" @checkCategories="doForceCheck"></all-category-filter>
         </filters-tab>
     </div>
 </template>
@@ -10,6 +11,7 @@
 <script>
     import FiltersTab from './FiltersTab.vue';
     import CategoryFilter from './CategoryFilter.vue';
+    import AllCatFilter from './AllCatFilter.vue';
     import TextFilter from './TextFilter.vue';
     export default {
         name: 'Filters',
@@ -42,7 +44,8 @@
                 filterTypes: [
                     'text',
                     'category'
-                ]
+                ],
+                allChecked: false
             }
         },
         props: {
@@ -101,11 +104,15 @@
                         self.activeFilters.category[property].splice(currentPosition, 1);
                     }
                 }
+            },
+            doForceCheck(check) {
+                this.allChecked = check;
             }
         },
         components: {
             'filters-tab': FiltersTab,
             'category-filter': CategoryFilter,
+            'all-category-filter' : AllCatFilter,
             'text-filter': TextFilter
         }
     }

@@ -75,12 +75,6 @@ export default {
                                 label: '-',
                                 property: 'accommodationStars',
                                 value: 6
-                            },
-                            {
-                                type: 'category',
-                                label: 'Все',
-                                property: 'accommodationStars',
-                                value: 'all'
                             }
 
                         ]

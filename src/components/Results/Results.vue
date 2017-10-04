@@ -21,7 +21,7 @@
         data() {
             return {
                 currentPage: 1,
-                itemsPerPage: 1,
+                itemsPerPage: 3,
                 toursOnPage: [],
                 priceType: 'tourist'
             }
