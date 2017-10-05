@@ -1,7 +1,7 @@
 <template>
     <div class="tour-item">
         <div class="tour-image">
-            <img src="http://media.expedia.com/hotels/12000000/11460000/11458400/11458323/d080c658_b.jpg" alt="Отель">
+            <img v-bind:src="tour.picture" alt="Отель">
         </div>
         <div class="tour-description">
             <div class="tour-package">
@@ -17,11 +17,11 @@
                 <ul class="tour-services">
                     <li>
                         <span>Размещение:</span>
-                        8 вариантов
+                        {{tour.accommodationsAmount}} {{getNumEnding(tour.accommodationsAmount)}}
                     </li>
                     <li>
                         <span>Питание:</span>
-                        2 варианта
+                        {{tour.accommodationMealsAmount}} {{getNumEnding(tour.accommodationMealsAmount)}}
                     </li>
                     <li>
                         <span>Подтверждение:</span>
@@ -40,7 +40,7 @@
                 <ul class="tour-services tour-services-avia">
                     <li>
                         <span>Перелет:</span>
-                        8 вариантов
+                        8 {{getNumEnding(8)}}
                     </li>
                     <li>
                         <span>Трансфер:</span>
@@ -51,7 +51,10 @@
         </div>
         <div class="tour-side">
             <div class="tour-price">
-                от <span class="total-price">100 000 {{priceType}}</span> <span class="currency">rub</span>
+                от
+                <span class="netto" v-show="priceType === 'agent'">{{nettoPrice}}</span>
+                <span class="total-price">{{tour.price}}</span>
+                <span class="currency">{{tour.currency}}</span>
             </div>
             <div class="tour-to-booking">
                 <a href="#"class="btn">
@@ -74,7 +77,15 @@
     export default {
         name: 'Tour',
         data() {
-            return {}
+            return {
+                nettoPrice: '',
+                variantEndings: [
+                    'вариант',
+                    'варианта',
+                    'вариантов',
+                    'вариантов'
+                ]
+            }
         },
         props: {
             tour: {
@@ -84,6 +95,34 @@
             priceType: {
                 type: String,
                 required: true
+            }
+        },
+        mounted() {
+            let price = Math.ceil(this.tour.price),
+                markPrice = Math.ceil(this.tour.markPrice);
+            price = price - markPrice;
+            this.nettoPrice = `${price} - ${markPrice} = `;
+        },
+        methods: {
+            getNumEnding(iNumber) {
+                let sEnding, i;
+                iNumber = iNumber % 100;
+                if (iNumber>=10 && iNumber<=19) {
+                    sEnding=this.variantEndings[2];
+                }
+                else {
+                    i = iNumber % 10;
+                    switch (i)
+                    {
+                        case (0): sEnding = this.variantEndings[3] ? this.variantEndings[3] : this.variantEndings[0]; break;
+                        case (1): sEnding = this.variantEndings[0]; break;
+                        case (2):
+                        case (3):
+                        case (4): sEnding = this.variantEndings[1]; break;
+                        default: sEnding = this.variantEndings[2];
+                    }
+                }
+                return sEnding;
             }
         }
     }
@@ -112,9 +151,12 @@
         &-image {
             display: flex;
             align-items: center;
+            justify-content: center;
             height: 200px;
             width: 260px;
+            overflow: hidden;
             img {
+                height: auto;
                 width: 100%;
             }
         }

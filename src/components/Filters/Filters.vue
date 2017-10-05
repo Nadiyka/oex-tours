@@ -2,7 +2,7 @@
     <div class="tour-aside">
         <filters-tab v-for="(tab, type) in filterTabs" :type="type" :header="tab.header" v-on:filter="filter">
             <text-filter v-for="textFilter in tab.filtersInTab.text" :filter="textFilter" v-on:filter="filter" slot="name"></text-filter>
-            <category-filter v-for="categoryFilter in tab.filtersInTab.category" :filter="categoryFilter" v-on:filter="filter" slot="category" :force-all="allChecked"></category-filter>
+            <category-filter v-for="categoryFilter in tab.filtersInTab.category" :filter="categoryFilter" v-on:filter="filter" slot="category" :force-all="forceAll"></category-filter>
             <all-category-filter :all-checked="allChecked" slot="category" @checkCategories="doForceCheck"></all-category-filter>
         </filters-tab>
     </div>
@@ -23,6 +23,7 @@
                         array.forEach(function (element) {
                             if (element[property] && element[property].toLowerCase().indexOf(value.toLowerCase()) !== -1) {
                                 filtered.push(element);
+                                console.log(element);
                             }
                         });
                         return filtered;
@@ -45,7 +46,11 @@
                     'text',
                     'category'
                 ],
-                allChecked: false
+                allChecked: false,
+                forceAll: {
+                    run: 0,
+                    check: true
+                }
             }
         },
         props: {
@@ -97,16 +102,25 @@
                         self.activeFilters.category[property] = [];
                         currentPosition = -1;
                     }
-                    if ( active && (currentPosition === -1 ||  currentPosition !== undefined) ) {
+                    if ( active && (currentPosition === -1 || currentPosition === undefined) ) {
                         self.activeFilters.category[property].push(value);
                     }
                     if ( !active && currentPosition !== -1 ) {
                         self.activeFilters.category[property].splice(currentPosition, 1);
                     }
                 }
+                this.checkAllCategories(property)
             },
             doForceCheck(check) {
-                this.allChecked = check;
+                this.forceAll.run++;
+                this.forceAll.check = check;
+            },
+            checkAllCategories(property) {
+                if (this.activeFilters.category[property] && this.filterTabs.category.filtersInTab.category.length === this.activeFilters.category[property].length) {
+                    this.allChecked = true;
+                } else {
+                    this.allChecked = false;
+                }
             }
         },
         components: {

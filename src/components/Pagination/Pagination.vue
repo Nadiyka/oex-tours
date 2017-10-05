@@ -101,10 +101,8 @@
                         this.maxPage++;
                     }
                 }
-            }
-        },
-        watch: {
-            currentPage(value) {
+            },
+            setCurrentRange(value) {
                 if (value === 1) {
                     this.goToFirstPage();
                     return;
@@ -115,10 +113,17 @@
                 }
                 if (value > this.oldCurrentPage) {
                     this.goToNextPage(value);
+                    return;
                 }
                 if (value < this.oldCurrentPage) {
                     this.goToPrevPage(value);
+                    return;
                 }
+            }
+        },
+        watch: {
+            currentPage(value) {
+                this.setCurrentRange(value)
             },
             items(value) {
                 let newPage = this.currentPage ? this.currentPage : 1;
@@ -126,7 +131,7 @@
                 while (newPage > this.pages) {
                     newPage--;
                 }
-                this.goToPage(newPage)
+                this.goToPage(newPage);
             }
         }
     }

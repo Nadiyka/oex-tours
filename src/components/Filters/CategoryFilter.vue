@@ -17,7 +17,7 @@
                 type: Object,
                 required: true
             },
-            forceAll: Boolean
+            forceAll: Object
         },
         methods: {
             categoryFilter: function () {
@@ -25,9 +25,12 @@
             }
         },
         watch: {
-            forceAll(check) {
-                this.checked = check;
-                this.$emit('filter', this.filter.type, this.filter.property, this.filter.value, this.checked);
+            forceAll:{
+                handler(forceAll) {
+                    this.checked = forceAll.check;
+                    this.$emit('filter', this.filter.type, this.filter.property, this.filter.value, this.checked);
+                },
+                deep: true
             }
         }
     }
