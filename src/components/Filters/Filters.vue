@@ -1,6 +1,6 @@
 <template>
     <div class="tour-aside">
-        <filters-tab v-for="(tab, type) in filterTabs" :type="type" :header="tab.header" v-on:filter="filter">
+        <filters-tab v-for="(tab, type) in filterTabs" :type="type" :header="tab.header">
 
             <text-filter v-for="textFilter in tab.filtersInTab.text" :filter="textFilter" v-on:filter="filter" slot="name"></text-filter>
 
@@ -9,6 +9,10 @@
             <all-category-filter :all-checked="allChecked" slot="category" @checkCategories="doForceCheck"></all-category-filter>
 
             <range-filter v-for="rangeFilter in tab.filtersInTab.range" :filter="rangeFilter" v-on:filter="filter" slot="range" ></range-filter>
+
+            <checkbox-filter v-for="checkboxFilter in tab.filtersInTab.checkbox" :filter="checkboxFilter" v-on:filter="filter" slot="checkbox" >
+                <ul></ul>
+            </checkbox-filter>
 
         </filters-tab>
     </div>
@@ -20,6 +24,7 @@
     import AllCatFilter from './AllCatFilter.vue';
     import TextFilter from './TextFilter.vue';
     import RangeFilter from './RangeFilter.vue';
+    import CheckboxFilter from './CheckboxFilter.vue';
     export default {
         name: 'Filters',
         data() {
@@ -28,7 +33,7 @@
                     text(array, property, value) {
                         let filtered = [];
                         array.forEach(function (element) {
-                            if (element[property] && element[property].toLowerCase().indexOf(value.toLowerCase()) !== -1) {
+                            if (element.hotelsResult[property] && element.hotelsResult[property].toLowerCase().indexOf(value.toLowerCase()) !== -1) {
                                 filtered.push(element);
                             }
                         });
@@ -37,7 +42,7 @@
                     category(array, property, values) {
                         let filtered = [];
                         array.forEach(function (element) {
-                            if (!values.length || element[property] && values.indexOf(element[property]) !== -1) {
+                            if (!values.length || element.hotelsResult[property] && values.indexOf(element.hotelsResult[property]) !== -1) {
                                 filtered.push(element);
                             }
                         });
@@ -46,24 +51,46 @@
                     range(array, property, values) {
                         let filtered = [];
                         array.forEach(function (element) {
-                            console.log(element.accommodationHotelName, element[property]);
-                            if (element[property] && (element[property] >= values.min && element[property] <= values.max)) {
+                            if (element.hotelsResult[property] && (element.hotelsResult[property] >= values.min && element.hotelsResult[property] <= values.max)) {
                                 filtered.push(element);
-                                console.log(element.accommodationHotelName, element[property]);
                             }
                         });
                         return filtered;
-                    }
+                    },
+                    checkbox(array, property, values) {
+                        let filtered = [];
+                        array.forEach(function (element) {
+                            console.log(element.hotelsResult.accommodationHotelName, element.hotelsResult[property]);
+                            if (values.length !== element.hotelsResult[property].length || !element.hotelsResult[property]) {
+                                return;
+                            }
+                            if (!values.length) {
+                                filtered.push(element);
+                                return;
+                            }
+
+                            let hasAllCriteria = true;
+                            values.forEach((value) => {
+                                hasAllCriteria = element.hotelsResult[property].indexOf(value) !== -1;
+                            });
+                            if (hasAllCriteria) {
+                                filtered.push(element);
+                            }
+                        });
+                        return filtered;
+                    },
                 },
                 activeFilters: {
                     text: {},
                     category: {},
-                    range: {}
+                    range: {},
+                    checkbox: {}
                 },
                 filterTypes: [
                     'text',
                     'category',
-                    'range'
+                    'range',
+                    'checkbox'
                 ],
                 allChecked: false,
                 forceAll: {
@@ -133,6 +160,21 @@
             rangeAddFilter(property, range) {
                 this.activeFilters.range[property] = range;
             },
+            checkboxAddFilter(property, value, active) {
+                let currentPosition;
+                if (this.activeFilters.checkbox[property]) {
+                    currentPosition = this.activeFilters.checkbox[property].indexOf(value);
+                } else {
+                    this.activeFilters.checkbox[property] = [];
+                    currentPosition = -1;
+                }
+                if ( active && (currentPosition === -1 || currentPosition === undefined) ) {
+                    this.activeFilters.checkbox[property].push(value);
+                }
+                if ( !active && currentPosition !== -1 ) {
+                    this.activeFilters.checkbox[property].splice(currentPosition, 1);
+                }
+            },
             doForceCheck(check) {
                 this.forceAll.run++;
                 this.forceAll.check = check;
@@ -146,11 +188,13 @@
             }
         },
         components: {
+            CheckboxFilter,
             'filters-tab': FiltersTab,
             'category-filter': CategoryFilter,
             'all-category-filter' : AllCatFilter,
             'text-filter': TextFilter,
-            'range-filter': RangeFilter
+            'range-filter': RangeFilter,
+            'checkbox-filter': CheckboxFilter
         }
     }
 </script>

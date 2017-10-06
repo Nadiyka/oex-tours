@@ -18,6 +18,10 @@
                     <slot name="range"></slot>
                 </div>
 
+                <ul class="tour-checkbox-filters" v-if="checkboxTab">
+                    <slot name="checkbox"></slot>
+                </ul>
+
             </div>
         </transition>
     </div>
@@ -27,7 +31,8 @@
         name: 'filters-tab',
         data() {
             return{
-                active: false
+                active: false,
+                checkboxTab: true
             }
         },
         props: {
@@ -44,6 +49,7 @@
         mounted() {
             if (this.type === 'name' || this.type === 'category' || this.type === 'range') {
                 this.active = true;
+                this.checkboxTab = false;
             }
         },
         methods: {
@@ -130,6 +136,23 @@
             }
             label {
                 padding: 22px 0 0 7px;
+            }
+        }
+        &-checkbox-filters {
+            padding: 7px 0 0;
+            margin: 0;
+            list-style: none;
+            font-size: 14px;
+            li {
+                padding-bottom: 10px;
+            }
+            label {
+                display: inline-block;
+                padding-left: 30px;
+                line-height: 1.5;
+                &:before {
+                    left: 0;
+                }
             }
         }
     }

@@ -1,7 +1,7 @@
 <template>
     <div class="tour-item">
         <div class="tour-image">
-            <img v-bind:src="tour.picture" alt="Отель">
+            <img v-bind:src="tour.hotelsResult.picture" alt="Отель">
         </div>
         <div class="tour-description">
             <div class="tour-package">
@@ -9,19 +9,19 @@
                 <span>пакетный тур</span>
             </div>
             <div class="tour-category">
-                <i class="icon-star" v-for="star in tour.accommodationStars"></i>
+                <i class="icon-star" v-for="star in tour.hotelsResult.accommodationStars"></i>
             </div>
-            <div class="tour-hotel-name">{{tour.accommodationHotelName}}</div>
+            <div class="tour-hotel-name">{{tour.hotelsResult.accommodationHotelName}}</div>
             <div class="tour-info">
                 <i class="icon-hotel"></i>
                 <ul class="tour-services">
                     <li>
                         <span>Размещение:</span>
-                        {{tour.accommodationsAmount}} {{getNumEnding(tour.accommodationsAmount)}}
+                        {{tour.hotelsResult.accommodationsAmount}} {{getNumEnding(tour.hotelsResult.accommodationsAmount)}}
                     </li>
                     <li>
                         <span>Питание:</span>
-                        {{tour.accommodationMealsAmount}} {{getNumEnding(tour.accommodationMealsAmount)}}
+                        {{tour.hotelsResult.accommodationMealsAmount}} {{getNumEnding(tour.hotelsResult.accommodationMealsAmount)}}
                     </li>
                     <li>
                         <span>Подтверждение:</span>
@@ -40,7 +40,7 @@
                 <ul class="tour-services tour-services-avia">
                     <li>
                         <span>Перелет:</span>
-                        8 {{getNumEnding(8)}}
+                        {{tour.hotelsResult.accommodationMealsAmount}} {{getNumEnding(8)}}
                     </li>
                     <li>
                         <span>Трансфер:</span>

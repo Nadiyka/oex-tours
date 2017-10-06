@@ -19,9 +19,10 @@ export default {
                     loading: true,
                     error: false
                 },
-                tours: fakeTours
+                tours: fakeTours.results,
+                filters: fakeTours.filters
             },
-            filteredTours: fakeTours.slice(),
+            filteredTours: [],
             filterTabs: {
                 name: {
                     header: '',
@@ -35,6 +36,21 @@ export default {
                             }
                         ]
                     },
+                },
+                range: {
+                    header: 'Расстояние до центра',
+                    filtersInTab: {
+                        range: [
+                            {
+                                type: 'range',
+                                label: 'Расстояние до центра',
+                                property: 'accommodationDistance',
+                                minValue: 0,
+                                maxValue: 100,
+                                unit: 'км'
+                            }
+                        ]
+                    }
                 },
                 category: {
                     header: 'Категория',
@@ -80,21 +96,6 @@ export default {
                         ]
                     }
                 },
-                range: {
-                    header: 'Расстояние до центра',
-                    filtersInTab: {
-                        range: [
-                            {
-                                type: 'range',
-                                label: 'Расстояние до центра',
-                                property: 'accommodationDistance',
-                                minValue: 0,
-                                maxValue: 30,
-                                unit: 'км'
-                            }
-                        ]
-                    }
-                }
             }
         }
     },
@@ -106,15 +107,52 @@ export default {
     watch: {
         results: {
             handler: function(newResults){
-                this.filteredTours = newResults.tours;
+                this.filteredTours = newResults.tours.slice();
             },
             deep: true
         }
     },
     beforeMount() {
+        let minDistance = 9999,
+            maxDistance = 0;
+
         this.results.tours.forEach((el) => {
-            el.accommodationStars = parseInt(el.accommodationStars)
+            el.hotelsResult.accommodationStars = parseInt(el.hotelsResult.accommodationStars);
+            el.hotelsResult.accommodationDistance = parseInt(el.hotelsResult.accommodationDistance);
+            // min
+            if (el.hotelsResult.accommodationDistance < minDistance) {
+                minDistance = el.hotelsResult.accommodationDistance;
+            }
+            //max
+            if (el.hotelsResult.accommodationDistance > maxDistance) {
+                maxDistance = el.hotelsResult.accommodationDistance;
+            }
+        });
+
+        this.filterTabs.range.filtersInTab.range[0].minValue = minDistance;
+        this.filterTabs.range.filtersInTab.range[0].maxValue = maxDistance;
+
+        this.filteredTours = this.results.tours.slice();
+
+        // собираем табы
+        this.results.filters.forEach((filterTab)=> {
+            let filters = [];
+            filterTab.filters.forEach((filter) => {
+                filters.push({
+                    type: 'checkbox',
+                    label: filter.titleRu ? filter.titleRu : filter.titleEn,
+                    property: 'accommodationFilters',
+                    value: parseInt(filter.id)
+                })
+            });
+            this.filterTabs['checkbox' + filterTab.groupId] = {
+                header: filterTab.name,
+                filtersInTab: {
+                    checkbox: filters
+                }
+            }
         })
+
     },
     components: {
         Results,

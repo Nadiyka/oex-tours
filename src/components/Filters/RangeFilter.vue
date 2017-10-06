@@ -30,7 +30,6 @@
                 sliderStyle: [
                     {
                         position: 'absolute',
-                        zIndex: '2',
                         outline: 'none',
                         cursor: 'pointer',
                         marginLeft: '-.6em',
@@ -46,7 +45,6 @@
                     },
                     {
                         position: 'absolute',
-                        zIndex: '2',
                         outline: 'none',
                         cursor: 'pointer',
                         marginLeft: '-.6em',
