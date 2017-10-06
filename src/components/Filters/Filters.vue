@@ -1,9 +1,15 @@
 <template>
     <div class="tour-aside">
         <filters-tab v-for="(tab, type) in filterTabs" :type="type" :header="tab.header" v-on:filter="filter">
+
             <text-filter v-for="textFilter in tab.filtersInTab.text" :filter="textFilter" v-on:filter="filter" slot="name"></text-filter>
+
             <category-filter v-for="categoryFilter in tab.filtersInTab.category" :filter="categoryFilter" v-on:filter="filter" slot="category" :force-all="forceAll"></category-filter>
+
             <all-category-filter :all-checked="allChecked" slot="category" @checkCategories="doForceCheck"></all-category-filter>
+
+            <range-filter v-for="rangeFilter in tab.filtersInTab.range" :filter="rangeFilter" v-on:filter="filter" slot="range" ></range-filter>
+
         </filters-tab>
     </div>
 </template>
@@ -13,6 +19,7 @@
     import CategoryFilter from './CategoryFilter.vue';
     import AllCatFilter from './AllCatFilter.vue';
     import TextFilter from './TextFilter.vue';
+    import RangeFilter from './RangeFilter.vue';
     export default {
         name: 'Filters',
         data() {
@@ -23,7 +30,6 @@
                         array.forEach(function (element) {
                             if (element[property] && element[property].toLowerCase().indexOf(value.toLowerCase()) !== -1) {
                                 filtered.push(element);
-                                console.log(element);
                             }
                         });
                         return filtered;
@@ -36,15 +42,28 @@
                             }
                         });
                         return filtered;
+                    },
+                    range(array, property, values) {
+                        let filtered = [];
+                        array.forEach(function (element) {
+                            console.log(element.accommodationHotelName, element[property]);
+                            if (element[property] && (element[property] >= values.min && element[property] <= values.max)) {
+                                filtered.push(element);
+                                console.log(element.accommodationHotelName, element[property]);
+                            }
+                        });
+                        return filtered;
                     }
                 },
                 activeFilters: {
                     text: {},
-                    category: {}
+                    category: {},
+                    range: {}
                 },
                 filterTypes: [
                     'text',
-                    'category'
+                    'category',
+                    'range'
                 ],
                 allChecked: false,
                 forceAll: {
@@ -111,6 +130,9 @@
                 }
                 this.checkAllCategories(property)
             },
+            rangeAddFilter(property, range) {
+                this.activeFilters.range[property] = range;
+            },
             doForceCheck(check) {
                 this.forceAll.run++;
                 this.forceAll.check = check;
@@ -127,7 +149,8 @@
             'filters-tab': FiltersTab,
             'category-filter': CategoryFilter,
             'all-category-filter' : AllCatFilter,
-            'text-filter': TextFilter
+            'text-filter': TextFilter,
+            'range-filter': RangeFilter
         }
     }
 </script>

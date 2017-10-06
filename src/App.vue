@@ -79,6 +79,21 @@ export default {
 
                         ]
                     }
+                },
+                range: {
+                    header: 'Расстояние до центра',
+                    filtersInTab: {
+                        range: [
+                            {
+                                type: 'range',
+                                label: 'Расстояние до центра',
+                                property: 'accommodationDistance',
+                                minValue: 0,
+                                maxValue: 30,
+                                unit: 'км'
+                            }
+                        ]
+                    }
                 }
             }
         }

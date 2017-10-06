@@ -14,6 +14,10 @@
                     <slot name="category"></slot>
                 </ul>
 
+                <div v-if="type === 'range'">
+                    <slot name="range"></slot>
+                </div>
+
             </div>
         </transition>
     </div>
@@ -38,7 +42,7 @@
             }
         },
         mounted() {
-            if (this.type === 'name' || this.type === 'category') {
+            if (this.type === 'name' || this.type === 'category' || this.type === 'range') {
                 this.active = true;
             }
         },
@@ -100,7 +104,7 @@
                 }
             }
             &_filters {
-                padding: 11px 40px 11px 21px;
+                padding: 11px 19px 11px 21px
             }
 
             .text-filter {
