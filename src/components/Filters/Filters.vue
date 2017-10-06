@@ -60,12 +60,12 @@
                     checkbox(array, property, values) {
                         let filtered = [];
                         array.forEach(function (element) {
-                            console.log(element.hotelsResult.accommodationHotelName, element.hotelsResult[property]);
-                            if (values.length !== element.hotelsResult[property].length || !element.hotelsResult[property]) {
-                                return;
-                            }
+
                             if (!values.length) {
                                 filtered.push(element);
+                                return;
+                            }
+                            if (values.length !== element.hotelsResult[property].length || !element.hotelsResult[property]) {
                                 return;
                             }
 

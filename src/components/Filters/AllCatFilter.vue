@@ -1,7 +1,7 @@
 <template>
-    <li>
+    <li class="all-categories">
         <input id="allCategories" v-model="checked" type="checkbox" @change="changeAll" />
-        <label  for="allCategories" class="checkbox">Все</label>
+        <label  for="allCategories">Все</label>
     </li>
 </template>
 <script>
@@ -35,4 +35,17 @@
 
     }
 </script>
-<style lang="scss"> </style>
+<style lang="scss">
+    .all-categories {
+        align-self: flex-start;
+        margin-left: 9px;
+        text-transform: uppercase;
+        text-decoration: underline;
+        cursor: pointer;
+        padding: 0!important;
+        > label {
+            padding: 0;
+            cursor: pointer;
+        }
+    }
+</style>

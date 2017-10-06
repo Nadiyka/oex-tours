@@ -102,6 +102,9 @@
                 markPrice = Math.ceil(this.tour.markPrice);
             price = price - markPrice;
             this.nettoPrice = `${price} - ${markPrice} = `;
+            if (!this.tour.hotelsResult.picture.length) {
+                this.tour.hotelsResult.picture = 'https://www.b17.ru/foto/uploaded/38dc5abadad52dc8367d506e9424a887.jpg'
+            }
         },
         methods: {
             getNumEnding(iNumber) {

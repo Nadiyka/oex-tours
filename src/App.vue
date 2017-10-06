@@ -58,31 +58,31 @@ export default {
                         category: [
                             {
                                 type: 'category',
-                                label: '1',
+                                label: '1*',
                                 property: 'accommodationStars',
                                 value: 1
                             },
                             {
                                 type: 'category',
-                                label: '2',
+                                label: '2*',
                                 property: 'accommodationStars',
                                 value: 2
                             },
                             {
                                 type: 'category',
-                                label: '3',
+                                label: '3*',
                                 property: 'accommodationStars',
                                 value: 3
                             },
                             {
                                 type: 'category',
-                                label: '4',
+                                label: '4*',
                                 property: 'accommodationStars',
                                 value: 4
                             },
                             {
                                 type: 'category',
-                                label: '5',
+                                label: '5*',
                                 property: 'accommodationStars',
                                 value: 5
                             },
