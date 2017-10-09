@@ -53,8 +53,8 @@
             <div class="tour-price">
                 от
                 <span class="netto" v-show="priceType === 'agent'">{{nettoPrice}}</span>
-                <span class="total-price">{{tour.hotelsResult.price}}</span>
-                <span class="currency">{{tour.hotelsResult.currency}}</span>
+                <span class="total-price">{{Math.ceil(tour.fullPrice.price)}}</span>
+                <span class="currency">{{tour.fullPrice.currency}}</span>
             </div>
             <div class="tour-to-booking">
                 <a href="#"class="btn">
@@ -98,8 +98,8 @@
             }
         },
         mounted() {
-            let price = Math.ceil(this.tour.price),
-                markPrice = Math.ceil(this.tour.markPrice);
+            let price = Math.ceil(this.tour.fullPrice.price),
+                markPrice = Math.ceil(this.tour.fullPrice.markPrice);
             price = price - markPrice;
             this.nettoPrice = `${price} - ${markPrice} = `;
             if (!this.tour.hotelsResult.picture.length) {

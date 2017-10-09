@@ -65,7 +65,7 @@
                                 filtered.push(element);
                                 return;
                             }
-                            if (values.length !== element.hotelsResult[property].length || !element.hotelsResult[property]) {
+                            if (!element.hotelsResult[property] || values.length > element.hotelsResult[property].length) {
                                 return;
                             }
 

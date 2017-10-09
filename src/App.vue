@@ -112,7 +112,7 @@ export default {
         compareTours(a, b) {
             let ans = 0;
             try {
-                ans = a.hotelsResult.price - b.hotelsResult.price;
+                ans = a.fullPrice.price - b.fullPrice.price;
             } catch(err) {}
             return ans;
         }
@@ -157,8 +157,8 @@ export default {
                 filters.push({
                     type: 'checkbox',
                     label: filter.titleRu ? filter.titleRu : filter.titleEn,
-                    property: 'accommodationFilters',
-                    value: parseInt(filter.id)
+                    property: 'facts',
+                    value: filter.id
                 })
             });
             tab = {

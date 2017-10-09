@@ -102,6 +102,17 @@
                     }
                 }
             },
+            afterFilter() {
+                let shownPages = this.maxPage - this.minPage + 1,
+                    addPages = 0;
+                if (shownPages < this.showPages) {
+                    addPages = this.showPages - shownPages;
+                    while (addPages > this.pages) {
+                        addPages--;
+                    }
+                }
+                this.maxPage += addPages;
+            },
             setCurrentRange(value) {
                 if (value === 1) {
                     this.goToFirstPage();
@@ -119,6 +130,10 @@
                     this.goToPrevPage(value);
                     return;
                 }
+                if (value === this.oldCurrentPage) {
+                    this.afterFilter(value);
+                    return;
+                }
             }
         },
         watch: {
@@ -132,6 +147,7 @@
                     newPage--;
                 }
                 this.goToPage(newPage);
+                this.setCurrentRange(newPage);
             }
         }
     }

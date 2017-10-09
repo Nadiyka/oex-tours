@@ -1,7 +1,7 @@
 <template>
     <div class="tour-tab">
         <div class="tour-tab_header" v-if="header.length" v-on:click="toggleTab();">
-            {{header}} <span> {{ showTab ? '&plus;' : '&minus;' }} </span>
+            {{header}} <span> {{ showTab ? '&minus;' : '&plus;' }} </span>
             <i class="icon-info icon-info_popular" v-if="special"></i>
         </div>
         <transition @enter="transitionIn" @leave="transitionOut" >

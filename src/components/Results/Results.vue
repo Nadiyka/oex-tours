@@ -28,7 +28,7 @@
         data() {
             return {
                 currentPage: 1,
-                itemsPerPage: 3,
+                itemsPerPage: 15,
                 toursOnPage: [],
                 priceType: 'tourist'
             }
@@ -68,6 +68,7 @@
 
 <style lang="scss">
     .tour-results {
+        margin-left: -20px;
         width: 925px;
     }
     .tour-controls {
