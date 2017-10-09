@@ -20,7 +20,7 @@ export default {
                     error: false
                 },
                 tours: fakeTours.results,
-                filters: fakeTours.filters
+                filters: fakeTours.filtersTabs
             },
             filteredTours: [],
             filterTabs: [
@@ -150,7 +150,9 @@ export default {
 
         // собираем табы
         this.results.filters.forEach((filterTab)=> {
-            let filters = [];
+            let filters = [],
+                isPopular =  filterTab.groupId.indexOf('topGroup') !== -1,
+                tab;
             filterTab.filters.forEach((filter) => {
                 filters.push({
                     type: 'checkbox',
@@ -159,14 +161,20 @@ export default {
                     value: parseInt(filter.id)
                 })
             });
-            this.filterTabs.push({
+            tab = {
                 tabType: 'default',
                 header: filterTab.name,
                 active: false,
+                special: isPopular,
                 filtersInTab: {
                     checkbox: filters
                 }
-            });
+            };
+            if (isPopular) {
+                this.filterTabs.splice(3, 0, tab);
+            } else {
+                this.filterTabs.push(tab);
+            }
         })
 
     },
@@ -274,6 +282,10 @@ export default {
     .icon-arrow:before {
         content: "\e901";
     }
+    .icon-info_popular:before {
+        content: "\0021";
+    }
+
 
     .btn {
         position: relative;
@@ -323,5 +335,22 @@ export default {
         background-color: #fff;
         border: 1px solid #d8d8d8;
         border-radius: 1px;
+    }
+    .icon-info_popular {
+        position: relative;
+        display: inline-block;
+        padding-top: 1px;
+        height: 14px;
+        width: 15px;
+        font-size: 11px;
+        text-align: center;
+        border-radius: 50%;
+        background-color: #df5252;
+        color: #fff;
+    }
+    .tour-tab_header .icon-info_popular {
+        position: absolute;
+        top: 8px;
+        margin-left: 10px;
     }
 </style>

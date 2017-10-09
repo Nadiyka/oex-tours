@@ -2,6 +2,7 @@
     <div class="tour-tab">
         <div class="tour-tab_header" v-if="header.length" v-on:click="toggleTab();">
             {{header}} <span> {{ showTab ? '&plus;' : '&minus;' }} </span>
+            <i class="icon-info icon-info_popular" v-if="special"></i>
         </div>
         <transition @enter="transitionIn" @leave="transitionOut" >
             <div class="tour-tab_filters" v-show="showTab">
@@ -46,6 +47,10 @@
                 required: true
             },
             active: {
+                type: Boolean,
+                default: false
+            },
+            special: {
                 type: Boolean,
                 default: false
             }

@@ -1,6 +1,6 @@
 <template>
     <div class="tour-aside">
-        <filters-tab v-for="tab in filterTabs" :type="tab.tabType" :header="tab.header" :active="tab.active">
+        <filters-tab v-for="tab in filterTabs" :type="tab.tabType" :header="tab.header" :active="tab.active" :special="tab.special">
 
             <text-filter v-for="textFilter in tab.filtersInTab.text" :filter="textFilter" v-on:filter="filter" slot="name"></text-filter>
 
