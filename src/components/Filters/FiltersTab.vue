@@ -1,9 +1,9 @@
 <template>
     <div class="tour-tab">
         <div class="tour-tab_header" v-if="header.length" v-on:click="toggleTab();">
-            {{header}} <span> {{ active ? '&plus;' : '&minus;' }} </span>
+            {{header}} <span> {{ showTab ? '&plus;' : '&minus;' }} </span>
         </div>
-        <transition name="slide">
+        <transition @enter="transitionIn" @leave="transitionOut" >
             <div class="tour-tab_filters" v-show="showTab">
 
                 <div v-if="type === 'name'">
@@ -27,6 +27,7 @@
     </div>
 </template>
 <script>
+    import Velocity from 'velocity-animate';
     export default {
         name: 'filters-tab',
         data() {
@@ -56,30 +57,24 @@
             toggleTab() {
                 this.showTab = ! this.showTab;
             },
-//            beforeEnter(el) {
-//                el.style.opacity = 0;
-//                el.style.height = 0;
-//            },
-//            enter(el, done) {
-//                let delay = el.dataset.index * 150;
-//                setTimeout(function () {
-//                    Velocity(
-//                        el,
-//                        { opacity: 1, height: '1.6em' },
-//                        { complete: done }
-//                    )
-//                }, delay)
-//            },
-//            leave(el, done) {
-//                let delay = el.dataset.index * 150;
-//                setTimeout(function () {
-//                    Velocity(
-//                        el,
-//                        { opacity: 0, height: 0 },
-//                        { complete: done }
-//                    )
-//                }, delay)
-//            }
+            transitionIn(el, done) {
+                Velocity(el, "stop");
+                Velocity(el, "slideDown",{
+                    duration: 350,
+                    easing: "easeOutQuart",
+                    queue: false,
+                    complete: done
+                })
+            },
+            transitionOut(el, done) {
+                Velocity(el, "stop");
+                Velocity(el, "slideUp",{
+                    duration: 350,
+                    easing: "easeOutQuart",
+                    queue: false,
+                    complete: done
+                })
+            }
         }
     }
 </script>
