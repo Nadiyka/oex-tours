@@ -5,13 +5,9 @@
             <i class="icon-arrow"></i>
         </div>
         <ul v-show="showMenu">
-            <li>
-                <input style="display:none" id="RUBTours" type="radio" value="RUB" v-model="currency" @click="changeCurrency">
-                <label class="checkbox" for="RUBTours">RUB</label>
-            </li>
-            <li>
-                <input style="display:none" id="EURTours" type="radio" value="EUR" v-model="currency" @click="changeCurrency">
-                <label class="checkbox" for="EURTours">EUR</label>
+            <li v-for="cur in currencyList">
+                <input style="display:none" :id="cur + 'Tours'" type="radio" :value="cur" v-model="currency" @click="changeCurrency">
+                <label class="checkbox" :for="cur + 'Tours'">{{cur}}</label>
             </li>
         </ul>
     </div>
@@ -23,7 +19,8 @@
         data() {
             return {
                 currency: 'RUB',
-                showMenu: false
+                showMenu: false,
+                currencyList: []
             }
         },
         methods: {
@@ -36,6 +33,13 @@
             closeMenu() {
                 this.showMenu = false;
             }
+        },
+        beforeMount() {
+            let currencies = JSON.parse(localStorage.getItem('oex-currency'));
+            currencies.forEach((cur) => {
+                this.currencyList.push(cur.name);
+                this.currency = cur.active ? cur.name : this.currency;
+            });
         },
         directives: {
             onClickaway: onClickaway,
