@@ -4,7 +4,7 @@
             {{header}} <span> {{ active ? '&plus;' : '&minus;' }} </span>
         </div>
         <transition name="slide">
-            <div class="tour-tab_filters" v-show="active">
+            <div class="tour-tab_filters" v-show="showTab">
 
                 <div v-if="type === 'name'">
                     <slot name="name"></slot>
@@ -18,7 +18,7 @@
                     <slot name="range"></slot>
                 </div>
 
-                <ul class="tour-checkbox-filters" v-if="checkboxTab">
+                <ul class="tour-checkbox-filters" v-if="type === 'default'">
                     <slot name="checkbox"></slot>
                 </ul>
 
@@ -31,8 +31,7 @@
         name: 'filters-tab',
         data() {
             return{
-                active: false,
-                checkboxTab: true
+                showTab: false
             }
         },
         props: {
@@ -44,17 +43,18 @@
             type: {
                 type: String,
                 required: true
+            },
+            active: {
+                type: Boolean,
+                default: false
             }
         },
         mounted() {
-            if (this.type === 'name' || this.type === 'category' || this.type === 'range') {
-                this.active = true;
-                this.checkboxTab = false;
-            }
+            this.showTab = this.active;
         },
         methods: {
             toggleTab() {
-                this.active = ! this.active;
+                this.showTab = ! this.showTab;
             },
 //            beforeEnter(el) {
 //                el.style.opacity = 0;

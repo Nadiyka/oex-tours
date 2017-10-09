@@ -1,5 +1,5 @@
 <template>
-    <div class="tour-list">
+    <div class="tour-list" v-show="tours.length">
         <tour v-for="tour in tours" :tour="tour" :priceType="priceType"></tour>
     </div>
 </template>

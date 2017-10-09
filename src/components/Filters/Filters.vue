@@ -1,6 +1,6 @@
 <template>
     <div class="tour-aside">
-        <filters-tab v-for="(tab, type) in filterTabs" :type="type" :header="tab.header">
+        <filters-tab v-for="tab in filterTabs" :type="tab.tabType" :header="tab.header" :active="tab.active">
 
             <text-filter v-for="textFilter in tab.filtersInTab.text" :filter="textFilter" v-on:filter="filter" slot="name"></text-filter>
 
@@ -101,7 +101,7 @@
         },
         props: {
             filterTabs: {
-                type: Object,
+                type: Array,
                 required: true
             },
             tours: {
@@ -180,7 +180,7 @@
                 this.forceAll.check = check;
             },
             checkAllCategories(property) {
-                if (this.activeFilters.category[property] && this.filterTabs.category.filtersInTab.category.length === this.activeFilters.category[property].length) {
+                if (this.activeFilters.category[property] && this.filterTabs[2].filtersInTab.category.length === this.activeFilters.category[property].length) {
                     this.allChecked = true;
                 } else {
                     this.allChecked = false;

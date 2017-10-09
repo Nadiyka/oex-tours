@@ -53,8 +53,8 @@
             <div class="tour-price">
                 от
                 <span class="netto" v-show="priceType === 'agent'">{{nettoPrice}}</span>
-                <span class="total-price">{{tour.price}}</span>
-                <span class="currency">{{tour.currency}}</span>
+                <span class="total-price">{{tour.hotelsResult.price}}</span>
+                <span class="currency">{{tour.hotelsResult.currency}}</span>
             </div>
             <div class="tour-to-booking">
                 <a href="#"class="btn">

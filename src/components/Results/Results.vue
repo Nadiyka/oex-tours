@@ -1,10 +1,16 @@
 <template>
-    <div class="tour-results" v-show="tours.length">
+    <div class="tour-results">
         <div class="tour-controls">
             <pagination :items="tours.length" :current-page="currentPage" :items-per-page="itemsPerPage" @pagination="paginate"></pagination>
-            <price @changePriceType="changedPriceType"></price>
+            <div class="tour-controls_right">
+                <price @changePriceType="changedPriceType"></price>
+                <currency></currency>
+            </div>
         </div>
         <tours :tours="toursOnPage" :price-type="priceType"> </tours>
+        <div class="tour-empty" v-show="!tours.length">
+            Нет подходящих туров. Попробуйте уменьшить количество фильтров
+        </div>
         <div class="tour-controls">
             <pagination :items="tours.length" :current-page="currentPage" :items-per-page="itemsPerPage" @pagination="paginate"></pagination>
         </div>
@@ -15,6 +21,7 @@
     import Tours from '../../components/Items/Tours.vue';
     import Pagination from '../../components/Pagination/Pagination.vue';
     import Price from '../../components/Price/Price.vue';
+    import Currency from '../../components/Price/Currency.vue';
     export default {
         name: 'Results',
 
@@ -53,7 +60,8 @@
         components: {
             'tours': Tours,
             'pagination': Pagination,
-            'price': Price
+            'price': Price,
+            'currency': Currency
         }
     }
 </script>
@@ -66,6 +74,11 @@
         display: flex;
         justify-content: space-between;
         margin: 20px 20px 25px 57px;
+        &_right {
+            display: flex;
+            justify-content: space-between;
+            width: 250px;
+        }
     }
     .dropdown-menu {
         position: relative;

@@ -23,9 +23,11 @@ export default {
                 filters: fakeTours.filters
             },
             filteredTours: [],
-            filterTabs: {
-                name: {
+            filterTabs: [
+                {
+                    tabType: 'name',
                     header: '',
+                    active: true,
                     filtersInTab: {
                         text: [
                             {
@@ -37,8 +39,10 @@ export default {
                         ]
                     },
                 },
-                range: {
+                {
+                    tabType: 'range',
                     header: 'Расстояние до центра',
+                    active: true,
                     filtersInTab: {
                         range: [
                             {
@@ -52,8 +56,10 @@ export default {
                         ]
                     }
                 },
-                category: {
+                {
+                    tabType: 'category',
                     header: 'Категория',
+                    active: true,
                     filtersInTab: {
                         category: [
                             {
@@ -95,13 +101,20 @@ export default {
 
                         ]
                     }
-                },
-            }
+                }
+            ]
         }
     },
     methods: {
-        filtered: function (filtered) {
+        filtered(filtered) {
             this.filteredTours = filtered;
+        },
+        compareTours(a, b) {
+            let ans = 0;
+            try {
+                ans = a.hotelsResult.price - b.hotelsResult.price;
+            } catch(err) {}
+            return ans;
         }
     },
     watch: {
@@ -129,9 +142,10 @@ export default {
             }
         });
 
-        this.filterTabs.range.filtersInTab.range[0].minValue = minDistance;
-        this.filterTabs.range.filtersInTab.range[0].maxValue = maxDistance;
+        this.filterTabs[1].filtersInTab.range[0].minValue = minDistance;
+        this.filterTabs[1].filtersInTab.range[0].maxValue = maxDistance;
 
+        this.results.tours.sort(this.compareTours);
         this.filteredTours = this.results.tours.slice();
 
         // собираем табы
@@ -145,12 +159,14 @@ export default {
                     value: parseInt(filter.id)
                 })
             });
-            this.filterTabs['checkbox' + filterTab.groupId] = {
+            this.filterTabs.push({
+                tabType: 'default',
                 header: filterTab.name,
+                active: false,
                 filtersInTab: {
                     checkbox: filters
                 }
-            }
+            });
         })
 
     },
