@@ -99,9 +99,9 @@
         },
         mounted() {
             let price = Math.ceil(this.tour.fullPrice.price),
-                markPrice = Math.ceil(this.tour.fullPrice.markPrice);
+                markPrice = Math.ceil(this.tour.fullPrice.priceMark);
             price = price - markPrice;
-            this.nettoPrice = `${price} - ${markPrice} = `;
+            this.nettoPrice = `${price} + ${markPrice} = `;
             if (!this.tour.hotelsResult.picture.length) {
                 this.tour.hotelsResult.picture = 'https://www.b17.ru/foto/uploaded/38dc5abadad52dc8367d506e9424a887.jpg'
             }
