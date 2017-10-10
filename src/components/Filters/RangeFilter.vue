@@ -92,26 +92,8 @@
             this.range[0] = this.filter.minValue;
             this.range[1] = this.filter.maxValue;
         },
-        watch: {
-            /*filter: {
-                handler(newFilter) {
-                    this.range[0] = newFilter.minValue;
-                    this.range[1] = newFilter.maxValue;
-                },
-                deep: true
-            },
-            range: {
-                handler(newRange) {
-                    if (newRange) {
-
-                    }
-                },
-                deep: true
-            }*/
-        },
         methods:{
             rangeFilter(newRange) {
-                console.log(newRange);
               this.$emit('filter', this.filter.type, this.filter.property, {
                   min: newRange[0],
                   max: newRange[1]
