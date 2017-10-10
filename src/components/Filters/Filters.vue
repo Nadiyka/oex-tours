@@ -1,16 +1,16 @@
 <template>
     <div class="tour-aside">
-        <filters-tab v-for="tab in filterTabs" :type="tab.tabType" :header="tab.header" :active="tab.active" :special="tab.special">
+        <filters-tab v-for="(tab ,index) in filterTabs" :type="tab.tabType" :header="tab.header" :active="tab.active" :special="tab.special" :key="index">
 
-            <text-filter v-for="textFilter in tab.filtersInTab.text" :filter="textFilter" v-on:filter="filter" slot="name"></text-filter>
+            <text-filter v-for="textFilter in tab.filtersInTab.text" :filter="textFilter" v-on:filter="filter" slot="name" :key="textFilter.label"></text-filter>
 
-            <category-filter v-for="categoryFilter in tab.filtersInTab.category" :filter="categoryFilter" v-on:filter="filter" slot="category" :force-all="forceAll"></category-filter>
+            <category-filter v-for="categoryFilter in tab.filtersInTab.category" :filter="categoryFilter" v-on:filter="filter" slot="category" :force-all="forceAll" :key="categoryFilter.label"></category-filter>
 
             <all-category-filter :all-checked="allChecked" slot="category" @checkCategories="doForceCheck"></all-category-filter>
 
-            <range-filter v-for="rangeFilter in tab.filtersInTab.range" :filter="rangeFilter" v-on:filter="filter" slot="range" ></range-filter>
+            <range-filter v-for="rangeFilter in tab.filtersInTab.range" :filter="rangeFilter" v-on:filter="filter" slot="range" :key="rangeFilter.label"></range-filter>
 
-            <checkbox-filter v-for="checkboxFilter in tab.filtersInTab.checkbox" :filter="checkboxFilter" v-on:filter="filter" slot="checkbox" >
+            <checkbox-filter v-for="checkboxFilter in tab.filtersInTab.checkbox" :filter="checkboxFilter" v-on:filter="filter" slot="checkbox"  :key="checkboxFilter.label">
                 <ul></ul>
             </checkbox-filter>
 

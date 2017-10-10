@@ -157,8 +157,9 @@ export default {
                 filters.push({
                     type: 'checkbox',
                     label: filter.titleRu ? filter.titleRu : filter.titleEn,
-                    property: 'facts',
-                    value: filter.id
+                    property: 'accommodationFacts',
+                    value: filter.id,
+                    double: isPopular
                 })
             });
             tab = {

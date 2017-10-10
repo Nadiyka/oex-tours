@@ -1,7 +1,7 @@
 <template>
     <li>
-        <input v-bind:id="'filter' + filter.value" v-model="checked" type="checkbox" @change="checkboxFilter" />
-        <label v-bind:for="'filter' + filter.value" class="checkbox">{{filter.label}}</label>
+        <input v-bind:id="'filter' + filter.value + (filter.double ? 'double' : '')" v-model="checked" type="checkbox" @change="checkboxFilter" />
+        <label v-bind:for="'filter' + filter.value + (filter.double ? 'double' : '')" class="checkbox">{{filter.label}}</label>
     </li>
 </template>
 <script>

@@ -1,6 +1,6 @@
 <template>
     <div class="tour-list" v-show="tours.length">
-        <tour v-for="tour in tours" :tour="tour" :priceType="priceType"></tour>
+        <tour v-for="tour in tours" :tour="tour" :priceType="priceType" :key="tour.tourId"></tour>
     </div>
 </template>
 <script>
