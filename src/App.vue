@@ -1,9 +1,28 @@
 <template>
-  <div class="center" id="content">
-    <status :status="results.status"></status>
-    <results :tours="filteredTours" v-show="results.tours.length"></results>
-    <filters :filterTabs="filterTabs" :tours="results.tours" v-show="results.tours.length" v-on:filtered="filtered"></filters>
-  </div>
+    <div id="content">
+        <gmap-map
+                v-show="results.tours.length"
+                :center="mapCenter"
+                :zoom="11"
+                :options="mapOptions"
+                map-type-id="roadmap"
+                style="width: 100%; height: 450px"
+        >
+            <gmap-marker
+                    :key="index"
+                    v-for="(m, index) in markers"
+                    :position="m.position"
+                    :clickable="true"
+                    :draggable="false"
+                    @click="mapCenter=m.position"
+            ></gmap-marker>
+        </gmap-map>
+        <div class="center">
+            <status :status="results.status"></status>
+            <results ref="results" :tours="filteredTours" v-show="results.tours.length"></results>
+            <filters :filterTabs="filterTabs" :tours="results.tours" v-show="results.tours.length" v-on:filtered="filtered"></filters>
+        </div>
+    </div>
 </template>
 <script>
 import { fakeTours } from './assets/fakeTours.js';
@@ -11,6 +30,7 @@ import { fakeTours } from './assets/fakeTours.js';
 import Results from './components/Results/Results.vue';
 import Status from './components/Status/Status.vue';
 import Filters from './components/Filters/Filters.vue';
+
 export default {
     data() {
         return {
@@ -102,12 +122,28 @@ export default {
                         ]
                     }
                 }
-            ]
+            ],
+            markers: [],
+            mapCenter: {
+                lat: 50.100822,
+                lng: 14.068581
+            },
+            mapOptions: {
+                streetViewControl: false,
+                zoomControl: true,
+                mapTypeControl: true
+            }
         }
     },
     methods: {
         filtered(filtered) {
             this.filteredTours = filtered;
+            this.markers = [];
+            this.filteredTours.forEach((tour)=> {
+                this.markers.push({
+                    position: {lat: tour.hotelsResult.accommodationLatitude, lng: tour.hotelsResult.accommodationLongitude}
+                })
+            })
         },
         compareTours(a, b) {
             let ans = 0;
@@ -131,6 +167,8 @@ export default {
 
         this.results.tours.forEach((el) => {
             el.hotelsResult.accommodationStars = parseInt(el.hotelsResult.accommodationStars);
+            el.hotelsResult.accommodationLatitude = parseFloat(el.hotelsResult.accommodationLatitude);
+            el.hotelsResult.accommodationLongitude = parseFloat(el.hotelsResult.accommodationLongitude);
             el.hotelsResult.accommodationDistance = parseInt(el.hotelsResult.accommodationDistance);
             // min
             if (el.hotelsResult.accommodationDistance < minDistance) {
@@ -198,11 +236,7 @@ export default {
         font-size: 16px;
         font-family: PTSansRegular, sans-serif;
     }
-    #content {
-        min-height: 400px;
-        padding-bottom: 30px;
-    }
-    #content.center {
+    #content .center {
         display: -webkit-flex;
         display: -ms-flexbox;
         display: flex;
@@ -213,6 +247,8 @@ export default {
         -ms-flex-wrap: wrap;
         flex-wrap: wrap;
         align-items: flex-start;
+        min-height: 400px;
+        padding-bottom: 30px;
         color: #333;
     }
     * {
