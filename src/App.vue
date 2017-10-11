@@ -1,7 +1,7 @@
 <template>
     <div id="content">
         <gmap-map
-                v-show="results.tours.length"
+                v-if="results.tours.length"
                 :center="mapCenter"
                 :zoom="11"
                 :options="mapOptions"
@@ -10,7 +10,7 @@
         >
             <gmap-marker
                     :key="index"
-                    v-for="(m, index) in markers"
+                    v-if="(m, index) in markers"
                     :position="m.position"
                     :clickable="true"
                     :draggable="false"
