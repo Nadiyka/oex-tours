@@ -56,6 +56,14 @@ export default {
                                 property: 'accommodationHotelName',
                                 placeholder: 'Искать отель по названию'
                             }
+                        ],
+                        checkbox: [
+                            {
+                                type: 'checkbox',
+                                label: 'Мгновенное подтверждение',
+                                property: 'accommodationStatus',
+                                value: '1'
+                            }
                         ]
                     },
                 },

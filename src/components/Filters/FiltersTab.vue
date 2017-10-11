@@ -115,6 +115,7 @@
 
             .text-filter {
                 padding: 0 10px;
+                margin-bottom: 10px;
                 border: none;
                 height: 28px;
                 width: 255px;

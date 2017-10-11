@@ -3,6 +3,9 @@
         <filters-tab v-for="(tab ,index) in filterTabs" :type="tab.tabType" :header="tab.header" :active="tab.active" :special="tab.special" :key="index">
 
             <text-filter v-for="textFilter in tab.filtersInTab.text" :filter="textFilter" v-on:filter="filter" slot="name" :key="textFilter.label"></text-filter>
+            <ul class="tour-checkbox-filters" slot="name">
+                <checkbox-filter v-for="checkboxFilter in tab.filtersInTab.checkbox" :filter="checkboxFilter" v-on:filter="filter" :key="checkboxFilter.label"></checkbox-filter>
+            </ul>
 
             <category-filter v-for="categoryFilter in tab.filtersInTab.category" :filter="categoryFilter" v-on:filter="filter" slot="category" :force-all="forceAll" :key="categoryFilter.label"></category-filter>
 
@@ -202,7 +205,7 @@
 <style lang="scss">
     .tour {
         &-aside {
-            padding: 5px 0 30px;
+            padding: 35px 0 30px;
             margin-top: 25px;
             width: 295px;
             background-color: #dce3e4;
