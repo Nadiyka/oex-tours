@@ -25,8 +25,11 @@
                     </li>
                     <li>
                         <span>Подтверждение:</span>
-                        <span class="tour-available tour-available-now">
+                        <span class="tour-available tour-available-now" v-if="tour.hotelsResult.accommodationStatus == '1'">
                             мгновенное
+                        </span>
+                        <span class="tour-available tour-available-wait" v-else>
+                            запрос
                         </span>
                     </li>
                 </ul>
@@ -44,7 +47,7 @@
                     </li>
                     <li>
                         <span>Трансфер:</span>
-                        аэропорт - отель
+                        {{direction}}
                     </li>
                 </ul>
             </div>
@@ -85,7 +88,8 @@
                     'варианта',
                     'вариантов',
                     'вариантов'
-                ]
+                ],
+                direction: ''
             }
         },
         props: {
@@ -111,6 +115,8 @@
             if (!this.tour.hotelsResult.picture.length) {
                 this.tour.hotelsResult.picture = 'https://www.b17.ru/foto/uploaded/38dc5abadad52dc8367d506e9424a887.jpg'
             }
+
+            this.direction = this.tour.transfersResult.direction == 'Return' ? 'туда - обратно' : (this.tour.transfersResult.direction == 'ToAirport' ? 'отель - аэропорт' : 'аэропорт - отель');
         },
         methods: {
             getNumEnding(iNumber) {

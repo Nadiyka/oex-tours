@@ -203,6 +203,7 @@
     .tour {
         &-aside {
             padding: 5px 0 30px;
+            margin-top: 25px;
             width: 295px;
             background-color: #dce3e4;
             box-shadow: -5px 3px 10px 0 rgba(0, 0, 0, 0.2);
