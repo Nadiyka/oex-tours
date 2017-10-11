@@ -14,7 +14,6 @@
                     :position="m.position"
                     :clickable="true"
                     :draggable="false"
-                    @click="mapCenter=m.position"
             ></gmap-marker>
         </gmap-map>
         <div class="center">
@@ -26,6 +25,7 @@
 </template>
 <script>
 import { fakeTours } from './assets/fakeTours.js';
+import { bus } from './bus.js';
 
 import Results from './components/Results/Results.vue';
 import Status from './components/Status/Status.vue';
@@ -148,9 +148,11 @@ export default {
             this.filteredTours = filtered;
             this.markers = [];
             this.filteredTours.forEach((tour)=> {
-                this.markers.push({
-                    position: {lat: tour.hotelsResult.accommodationLatitude, lng: tour.hotelsResult.accommodationLongitude}
-                })
+                if (tour.hotelsResult.accommodationLatitude && tour.hotelsResult.accommodationLongitude) {
+                    this.markers.push({
+                        position: {lat: tour.hotelsResult.accommodationLatitude, lng: tour.hotelsResult.accommodationLongitude}
+                    })
+                }
             })
         },
         compareTours(a, b) {
@@ -159,6 +161,10 @@ export default {
                 ans = a.fullPrice.price - b.fullPrice.price;
             } catch(err) {}
             return ans;
+        },
+        showHotelOnMap(params) {
+            console.log(params);
+            this.mapCenter = params;
         }
     },
     watch: {
@@ -169,14 +175,19 @@ export default {
             deep: true
         }
     },
+    created() {
+        bus.$on('showHotelOnMap', this.showHotelOnMap)
+    },
     beforeMount() {
         let minDistance = 9999,
             maxDistance = 0;
 
         this.results.tours.forEach((el) => {
             el.hotelsResult.accommodationStars = parseInt(el.hotelsResult.accommodationStars);
-            el.hotelsResult.accommodationLatitude = parseFloat(el.hotelsResult.accommodationLatitude);
-            el.hotelsResult.accommodationLongitude = parseFloat(el.hotelsResult.accommodationLongitude);
+            if (el.hotelsResult.accommodationLongitude && el.hotelsResult.accommodationLatitude) {
+                el.hotelsResult.accommodationLatitude = parseFloat(el.hotelsResult.accommodationLatitude);
+                el.hotelsResult.accommodationLongitude = parseFloat(el.hotelsResult.accommodationLongitude);
+            }
             el.hotelsResult.accommodationDistance = parseInt(el.hotelsResult.accommodationDistance);
             // min
             if (el.hotelsResult.accommodationDistance < minDistance) {

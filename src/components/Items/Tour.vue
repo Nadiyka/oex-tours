@@ -34,7 +34,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="tour-map-link">
+            <div class="tour-map-link" v-if="tour.hotelsResult.accommodationLatitude && tour.hotelsResult.accommodationLongitude" @click="showOnMap">
                 <i class="icon-marker"></i>
                 <span>На карте</span>
             </div>
@@ -77,6 +77,7 @@
 </template>
 
 <script>
+    import { bus } from '../../bus.js';
     export default {
         name: 'Tour',
         data() {
@@ -143,6 +144,12 @@
                 let parts = x.toString().split(".");
                 parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
                 return parts.join(".");
+            },
+            showOnMap() {
+                bus.$emit('showHotelOnMap', {
+                    lat: this.tour.hotelsResult.accommodationLatitude,
+                    lng: this.tour.hotelsResult.accommodationLongitude
+                });
             }
         }
     }
@@ -252,6 +259,7 @@
             border-bottom: 1px solid #d8d8d8;
             color: $blue-color;
             font-size: 14px;
+            cursor: pointer;
             i {
                 color: $red-color;
                 font-size: 18px;
