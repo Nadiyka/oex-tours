@@ -9,15 +9,17 @@
                 map-type-id="roadmap"
                 style="width: 100%; height: 450px"
         >
-            <gmap-marker
-                    v-for="(m, index) in map.markers"
-                    :position="m.position"
-                    :clickable="true"
-                    :draggable="false"
-                    :key="index"
-                    :icon="map.icon"
-                    @click="showHotelOnMap(m.position, m.tour)"
-            ></gmap-marker>
+            <gmap-cluster>
+                <gmap-marker
+                        v-for="(m, index) in map.markers"
+                        :position="m.position"
+                        :clickable="true"
+                        :draggable="false"
+                        :key="index"
+                        :icon="map.icon"
+                        @click="showHotelOnMap(m.position, m.tour)"
+                ></gmap-marker>
+            </gmap-cluster>
             <gmap-info-window
                     v-if="infowindow.tour !== null"
                     :opened="infowindow.opened"
