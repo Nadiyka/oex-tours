@@ -22,12 +22,13 @@
         name: 'price',
         data() {
             return {
-                priceType: 'tourist',
+                priceType: '',
                 showMenu: false
             }
         },
         methods: {
             changePriceType() {
+                sessionStorage.setItem('priceType', this.priceType);
                 this.$emit('changePriceType', this.priceType)
             },
             toggleMenu() {
@@ -39,6 +40,13 @@
         },
         directives: {
             onClickaway: onClickaway,
+        },
+        beforeMount() {
+            if (!sessionStorage.getItem('priceType')){
+                sessionStorage.setItem('priceType', 'tourist')
+            }
+
+            this.priceType = sessionStorage.getItem('priceType');
         }
     }
 </script>

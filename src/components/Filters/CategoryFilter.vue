@@ -19,6 +19,10 @@
             },
             forceAll: Object
         },
+        beforeMount() {
+            this.checked = this.filter.initActive;
+            this.categoryFilter();
+        },
         methods: {
             categoryFilter: function () {
                 this.$emit('filter', this.filter.type, this.filter.property, this.filter.value, this.checked)

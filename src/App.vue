@@ -9,11 +9,11 @@
                 style="width: 100%; height: 450px"
         >
             <gmap-marker
-                    :key="index"
-                    v-if="(m, index) in markers"
+                    v-for="(m, index) in markers"
                     :position="m.position"
                     :clickable="true"
                     :draggable="false"
+                    :key="index"
             ></gmap-marker>
         </gmap-map>
         <div class="center">
@@ -39,6 +39,7 @@ export default {
                     loading: true,
                     error: false
                 },
+                info: fakeTours.search_info,
                 tours: fakeTours.results,
                 filters: fakeTours.filtersTabs
             },
@@ -94,37 +95,43 @@ export default {
                                 type: 'category',
                                 label: '1*',
                                 property: 'accommodationStars',
-                                value: 1
+                                value: 1,
+                                initActive: false
                             },
                             {
                                 type: 'category',
                                 label: '2*',
                                 property: 'accommodationStars',
-                                value: 2
+                                value: 2,
+                                initActive: false
                             },
                             {
                                 type: 'category',
                                 label: '3*',
                                 property: 'accommodationStars',
-                                value: 3
+                                value: 3,
+                                initActive: false
                             },
                             {
                                 type: 'category',
                                 label: '4*',
                                 property: 'accommodationStars',
-                                value: 4
+                                value: 4,
+                                initActive: false
                             },
                             {
                                 type: 'category',
                                 label: '5*',
                                 property: 'accommodationStars',
-                                value: 5
+                                value: 5,
+                                initActive: false
                             },
                             {
                                 type: 'category',
                                 label: '-',
                                 property: 'accommodationStars',
-                                value: 6
+                                value: 6,
+                                initActive: true
                             }
 
                         ]
@@ -163,7 +170,6 @@ export default {
             return ans;
         },
         showHotelOnMap(params) {
-            console.log(params);
             this.mapCenter = params;
         }
     },
@@ -233,7 +239,14 @@ export default {
             } else {
                 this.filterTabs.push(tab);
             }
-        })
+        });
+
+        //отмечаем нужные категории
+        this.results.info.filterHotelFilterHotelTypeList.forEach((activeCategory)=> {
+            activeCategory = parseInt(activeCategory);
+
+            this.filterTabs[2].filtersInTab.category[activeCategory - 1].initActive = true;
+        });
 
     },
     components: {

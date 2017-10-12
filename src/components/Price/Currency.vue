@@ -25,7 +25,12 @@
         },
         methods: {
             changeCurrency() {
-
+                $.ajax({
+                    url: '/site/currency/?currency=' + this.currency,
+                    success: () => {
+                        location.reload();
+                    }
+                });
             },
             toggleMenu() {
                 this.showMenu = !this.showMenu;
