@@ -34,7 +34,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="tour-map-link" v-if="tour.hotelsResult.accommodationLatitude && tour.hotelsResult.accommodationLongitude" @click="showOnMap">
+            <div class="tour-map-link" v-if="tour.hotelsResult.accommodationLatitude && tour.hotelsResult.accommodationLongitude" @click="showOnMap" v-scroll-to="'#map'">
                 <i class="icon-marker"></i>
                 <span>На карте</span>
             </div>
@@ -78,6 +78,7 @@
 
 <script>
     import { bus } from '../../bus.js';
+    import VueScrollTo from 'vue-scrollto';
     export default {
         name: 'Tour',
         data() {
@@ -146,11 +147,17 @@
                 return parts.join(".");
             },
             showOnMap() {
-                bus.$emit('showHotelOnMap', {
-                    lat: this.tour.hotelsResult.accommodationLatitude,
-                    lng: this.tour.hotelsResult.accommodationLongitude
-                });
+                bus.$emit('showHotelOnMap',
+                    {
+                        lat: this.tour.hotelsResult.accommodationLatitude,
+                        lng: this.tour.hotelsResult.accommodationLongitude
+                    },
+                    this.tour
+                );
             }
+        },
+        directives: {
+            'scroll-to': VueScrollTo
         }
     }
 </script>
