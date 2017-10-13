@@ -289,6 +289,15 @@ export default {
                 this.filterTabs[2].filtersInTab.category[activeCategory - 1].initActive = true;
             });
         },
+        testMode() {
+            let self = this;
+            self.results.status.error = false;
+            self.results.status.loading = false;
+            self.results.tours = fakeTours.results;
+            self.results.filters = fakeTours.filtersTabs;
+            self.results.info= fakeTours.search_info;
+            self.initAll();
+        }
     },
     watch: {
         results: {
@@ -299,7 +308,8 @@ export default {
         }
     },
     created() {
-        let self = this;
+        let self = this,
+            isTestMode = JSON.parse(localStorage.getItem('tour-test'));
         try {
             $.ajax({
                 'cache': false,
@@ -313,22 +323,22 @@ export default {
                     self.initAll();
                 },
                 'error': function(err) {
-                    self.results.status.error = false;
-                    self.results.status.loading = false;
-                    self.results.tours = fakeTours.results;
-                    self.results.filters = fakeTours.filtersTabs;
-                    self.results.info= fakeTours.search_info;
-                    self.initAll();
+                    if (isTestMode) {
+                        self.testMode();
+                    } else {
+                        self.results.status.error = true;
+                        self.results.status.loading = false;
+                    }
                     console.log('Ошибка:', err.responseText);
                 }
             });
         } catch (err) {
-            self.results.status.error = false;
-            self.results.status.loading = false;
-            self.results.tours = fakeTours.results;
-            self.results.filters = fakeTours.filtersTabs;
-            self.results.info= fakeTours.search_info;
-            self.initAll();
+            if (isTestMode) {
+                self.testMode();
+            } else {
+                self.results.status.error = true;
+                self.results.status.loading = false;
+            }
         }
         bus.$on('showHotelOnMap', this.showHotelOnMap)
     },
