@@ -40,11 +40,15 @@
             }
         },
         beforeMount() {
-            let currencies = JSON.parse(localStorage.getItem('oex-currency'));
-            currencies.forEach((cur) => {
-                this.currencyList.push(cur.name);
-                this.currency = cur.active ? cur.name : this.currency;
-            });
+            try {
+                let currencies = JSON.parse(localStorage.getItem('oex-currency'));
+                currencies.forEach((cur) => {
+                    this.currencyList.push(cur.name);
+                    this.currency = cur.active ? cur.name : this.currency;
+                });
+            } catch (err) {
+                console.log(err);
+            }
         },
         directives: {
             onClickaway: onClickaway,
