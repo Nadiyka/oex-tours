@@ -24,6 +24,9 @@
             }
         },
         methods: {
+            /**
+             * Функция меняет валюту
+             */
             changeCurrency() {
                 $.ajax({
                     url: '/site/currency/?currency=' + this.currency,
@@ -32,9 +35,15 @@
                     }
                 });
             },
+            /**
+             * Функция показывает/скрывает меню
+             */
             toggleMenu() {
                 this.showMenu = !this.showMenu;
             },
+            /**
+             * Функция скрывает меню
+             */
             closeMenu() {
                 this.showMenu = false;
             }

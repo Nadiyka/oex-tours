@@ -17,6 +17,9 @@
             }
         },
         methods: {
+            /**
+             * Функция запускает фильтр по тексту
+             */
             textFilter: function () {
                 this.$emit('filter', this.filter.type, this.filter.property, this.value)
             }

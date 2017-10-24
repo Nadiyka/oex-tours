@@ -19,6 +19,9 @@
             }
         },
         methods: {
+            /**
+             * Функция включает/отключает все категории
+             */
             changeAll() {
                 if (this.checked) {
                     this.$emit('checkCategories', true);

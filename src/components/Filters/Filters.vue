@@ -33,6 +33,14 @@
         data() {
             return {
                 filtersFunction: {
+                    /**
+                     * Функция фильтрует по тексту
+                     * @param {Object[]} array
+                     * @param {string} property
+                     * @param {string} value
+                     *
+                     * @returns {Object[]}
+                     */
                     text(array, property, value) {
                         let filtered = [];
                         array.forEach(function (element) {
@@ -42,6 +50,14 @@
                         });
                         return filtered;
                     },
+                    /**
+                     * Функция фильтрует по тексту
+                     * @param {Object[]} array
+                     * @param {string} property
+                     * @param {Array} values
+                     *
+                     * @returns {Object[]}
+                     */
                     category(array, property, values) {
                         let filtered = [];
                         array.forEach(function (element) {
@@ -51,6 +67,14 @@
                         });
                         return filtered;
                     },
+                    /**
+                     * Функция фильтрует по тексту
+                     * @param {Object[]} array
+                     * @param {string} property
+                     * @param {Array} values
+                     *
+                     * @returns {Object[]}
+                     */
                     range(array, property, values) {
                         let filtered = [];
                         array.forEach(function (element) {
@@ -60,6 +84,14 @@
                         });
                         return filtered;
                     },
+                    /**
+                     * Функция фильтрует по тексту
+                     * @param {Object[]} array
+                     * @param {string} property
+                     * @param {Array} values
+                     *
+                     * @returns {Object[]}
+                     */
                     checkbox(array, property, values) {
                         let filtered = [];
                         array.forEach(function (element) {
@@ -113,6 +145,13 @@
             }
         },
         methods: {
+            /**
+             * Функция добавляет новый активный фильтр, и запускает фильтрацию
+             * @param {string} type
+             * @param {string} property
+             * @param {string|Array} value
+             * @param {boolean} [active]
+             */
             filter(type, property, value, active) {
                 let filteredResults = this.tours.slice();
                 if (this.filterTypes.indexOf(type) !== -1) {
@@ -121,6 +160,12 @@
                 }
                 this.$emit('filtered', filteredResults);
             },
+            /**
+             * Функция применяет все фильтры к турам
+             * @param {Object[]} tours
+             *
+             * @returns {Object[]}
+             */
             applyFilters(tours) {
                 for (let filterType in this.activeFilters) {
                     for (let filterProperty in this.activeFilters[filterType]) {
@@ -129,9 +174,20 @@
                 }
                 return tours;
             },
+            /**
+             * Функция добавляет фильтр по тексту
+             * @param {string} property
+             * @param {string} value
+             */
             textAddFilter(property, value) {
                 this.activeFilters.text[property] = value;
             },
+            /**
+             * Функция добавляет фильтр категории
+             * @param {string} property
+             * @param {string} value
+             * @param {boolean} active
+             */
             categoryAddFilter(property, value, active) {
                 let self = this;
                 if (value === 'all') {
@@ -160,9 +216,20 @@
                 }
                 this.checkAllCategories(property)
             },
+            /**
+             * Функция добавляет фильтр категории
+             * @param {string} property
+             * @param {Array} range
+             */
             rangeAddFilter(property, range) {
                 this.activeFilters.range[property] = range;
             },
+            /**
+             * Функция добавляет фильтр по чекбоксу
+             * @param {string} property
+             * @param {string} value
+             * @param {boolean} active
+             */
             checkboxAddFilter(property, value, active) {
                 let currentPosition;
                 if (this.activeFilters.checkbox[property]) {
@@ -178,10 +245,18 @@
                     this.activeFilters.checkbox[property].splice(currentPosition, 1);
                 }
             },
+            /**
+             * Функция отмечает все категории
+             * @param {boolean} check
+             */
             doForceCheck(check) {
                 this.forceAll.run++;
                 this.forceAll.check = check;
             },
+            /**
+             * Функция проверяет, отмечены ли все категории
+             * @param {string} property
+             */
             checkAllCategories(property) {
                 if (this.activeFilters.category[property] && this.filterTabs[2].filtersInTab.category.length === this.activeFilters.category[property].length) {
                     this.allChecked = true;

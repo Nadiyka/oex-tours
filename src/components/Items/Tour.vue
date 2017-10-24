@@ -121,6 +121,12 @@
             this.direction = this.tour.transfersResult.direction == 'Return' ? 'туда - обратно' : (this.tour.transfersResult.direction == 'ToAirport' ? 'отель - аэропорт' : 'аэропорт - отель');
         },
         methods: {
+            /**
+             * Функция возращает окончание для слова
+             * @param {number} iNumber
+             *
+             * @returns {string}
+             */
             getNumEnding(iNumber) {
                 let sEnding, i;
                 iNumber = iNumber % 100;
@@ -141,11 +147,20 @@
                 }
                 return sEnding;
             },
-            numberWithCommas(x) {
-                let parts = x.toString().split(".");
+            /**
+             * Функция возращает числов формате 11111.56
+             * @param {string} number
+             *
+             * @returns {string}
+             */
+            numberWithCommas(number) {
+                let parts = number.toString().split(".");
                 parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-                return parts.join(".");
+                return parts.join('.');
             },
+            /**
+             * Функция показывает отель на карте
+             */
             showOnMap() {
                 bus.$emit('showHotelOnMap',
                     {

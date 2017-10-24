@@ -30,7 +30,6 @@
         name: 'pagination',
         data() {
           return {
-              showPages: 5,
               minPage: 1,
               maxPage: 1,
               pages: 1,
@@ -50,6 +49,11 @@
                 type: Number,
                 required: true,
                 default: 1
+            },
+            showPages: {
+                type: Number,
+                required: false,
+                default: 5
             }
         },
         mounted() {
@@ -62,10 +66,17 @@
             }
         },
         methods: {
+            /**
+             * Функция перехода на страницу
+             * @param {string} page
+             */
             goToPage(page) {
                 this.oldCurrentPage = this.currentPage;
                 this.$emit('pagination', page)
             },
+            /**
+             * Функция перехода на первую страницу
+             */
             goToFirstPage() {
                 if (this.minPage !== 1) {
                     this.minPage = 1;
@@ -75,6 +86,9 @@
                     }
                 }
             },
+            /**
+             * Функция перехода на последнюю страницу
+             */
             goToLastPage() {
                 if (this.maxPage !== this.pages) {
                     this.maxPage = this.pages;
@@ -84,6 +98,9 @@
                     }
                 }
             },
+            /**
+             * Функция перехода на предыдущую страницу
+             */
             goToPrevPage(newPage) {
                 if (newPage < this.minPage ) {
                     this.maxPage = newPage;
@@ -93,6 +110,9 @@
                     }
                 }
             },
+            /**
+             * Функция перехода на следующую страницу
+             */
             goToNextPage(newPage) {
                 if (newPage > this.maxPage ) {
                     this.maxPage = newPage;
@@ -102,6 +122,9 @@
                     }
                 }
             },
+            /**
+             * Функция показа страниц после фильтрации
+             */
             afterFilter() {
                 let shownPages = this.maxPage - this.minPage + 1,
                     addPages = 0;
@@ -113,6 +136,9 @@
                 }
                 this.maxPage += addPages;
             },
+            /**
+             * Функция устаавливает текущую страницу
+             */
             setCurrentRange(value) {
                 if (value === 1) {
                     this.goToFirstPage();

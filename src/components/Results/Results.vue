@@ -43,11 +43,19 @@
             this.toursOnPage = this.tours.slice(this.currentPage - 1, this.itemsPerPage);
         },
         methods: {
+            /**
+             * Функция меняет текущую страницу, отображает туры на ней
+             * @param {number} page
+             */
             paginate(page) {
                 let startIndex = ((page - 1) * this.itemsPerPage);
                 this.currentPage = page;
                 this.toursOnPage = this.tours.slice(startIndex, this.itemsPerPage + startIndex);
             },
+            /**
+             * Функция меняет тип цены
+             * @param {string} priceType
+             */
             changedPriceType(priceType){
                 this.priceType = priceType
             }

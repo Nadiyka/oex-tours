@@ -19,6 +19,9 @@
             }
         },
         methods: {
+            /**
+             * Функция запускает фильтр по чебоксу
+             */
             checkboxFilter: function () {
                 this.$emit('filter', this.filter.type, this.filter.property, this.filter.value, this.checked)
             }

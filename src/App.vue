@@ -198,6 +198,11 @@ export default {
         }
     },
     methods: {
+        /**
+         * Функция выводит отфильтрованые отели в результаты
+         * и их меркеры на карту
+         * @param {Array} filtered
+         */
         filtered(filtered) {
             this.filteredTours = filtered;
             this.map.markers = [];
@@ -213,19 +218,34 @@ export default {
                 }
             })
         },
-        compareTours(a, b) {
+        /**
+         * Функция сравнивает туры по цене
+         * @param {Object} firstTour
+         * @param {Object} secondTour
+         *
+         * @returns {number}
+         */
+        compareTours(firstTour, secondTour) {
             let ans = 0;
             try {
-                ans = a.fullPrice.price - b.fullPrice.price;
+                ans = firstTour.fullPrice.price - secondTour.fullPrice.price;
             } catch(err) {}
             return ans;
         },
+        /**
+         * Функция открывает инфоокно с отелем на карте
+         * @param {Object} params
+         * @param {Object} tour
+         */
         showHotelOnMap(params, tour) {
             this.map.center = params;
             this.infowindow.position = params;
             this.infowindow.opened = true;
             this.infowindow.tour = tour;
         },
+        /**
+         * Функция инициализирует работу приложения
+         */
         initAll() {
             let minDistance = 9999,
                 maxDistance = 0;
@@ -289,6 +309,9 @@ export default {
                 this.filterTabs[2].filtersInTab.category[activeCategory - 1].initActive = true;
             });
         },
+        /**
+         * Функция отвечает за отображение тестовых данных
+         */
         testMode() {
             let self = this;
             self.results.status.error = false;
@@ -349,7 +372,6 @@ export default {
     }
 }
 </script>
-
 <style lang="scss">
     $yellow-color: #eed664;
     $blue-color: #1a6089;

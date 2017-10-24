@@ -27,13 +27,22 @@
             }
         },
         methods: {
+            /**
+             * Функция меняет тип цены
+             */
             changePriceType() {
                 sessionStorage.setItem('priceType', this.priceType);
                 this.$emit('changePriceType', this.priceType)
             },
+            /**
+             * Функция показывает/скрывает меню
+             */
             toggleMenu() {
                 this.showMenu = !this.showMenu;
             },
+            /**
+             * Функция скрывает меню
+             */
             closeMenu() {
                 this.showMenu = false;
             }

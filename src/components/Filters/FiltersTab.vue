@@ -59,9 +59,15 @@
             this.showTab = this.active;
         },
         methods: {
+            /**
+             * Функия показывает/скрывает таб
+             */
             toggleTab() {
                 this.showTab = ! this.showTab;
             },
+            /**
+             * Функция раскрыввет табу
+             */
             transitionIn(el, done) {
                 Velocity(el, "stop");
                 Velocity(el, "slideDown",{
@@ -71,6 +77,9 @@
                     complete: done
                 })
             },
+            /**
+             * Функция скрывает табу
+             */
             transitionOut(el, done) {
                 Velocity(el, "stop");
                 Velocity(el, "slideUp",{

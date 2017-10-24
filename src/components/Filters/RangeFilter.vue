@@ -93,6 +93,9 @@
             this.range[1] = this.filter.maxValue;
         },
         methods:{
+            /**
+             * Функция запускает фильтр по промежутку
+             */
             rangeFilter(newRange) {
               this.$emit('filter', this.filter.type, this.filter.property, {
                   min: newRange[0],
