@@ -66,10 +66,10 @@
             }
         },
         components: {
-            'tours': Tours,
-            'pagination': Pagination,
-            'price': Price,
-            'currency': Currency
+            Tours,
+            Pagination,
+            Price,
+            Currency
         }
     }
 </script>

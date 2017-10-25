@@ -143,7 +143,6 @@
             }
         },
         created() {
-            //типы фильтров
             for (let filter in this.filterTypes) {
                 if (typeof this.filtersFunction[this.filterTypes[filter]] === 'function'){
                     for (let resultPart in this.activeFilters) {
@@ -275,21 +274,18 @@
              * @param {Object} field
              */
             checkAllCategories(field) {
-                if (this.activeFilters[field.inclusion].category[field.property] && this.filterTabs[2].filtersInTab.category.length === this.activeFilters[field.inclusion].category[field.property].length) {
-                    this.allChecked = true;
-                } else {
-                    this.allChecked = false;
-                }
+                let hasCategory = this.activeFilters[field.inclusion].category[field.property],
+                    allChecked = hasCategory ? this.filterTabs[2].filtersInTab.category.length === this.activeFilters[field.inclusion].category[field.property].length : false;
+                return allChecked;
             }
         },
         components: {
             CheckboxFilter,
-            'filters-tab': FiltersTab,
-            'category-filter': CategoryFilter,
-            'all-category-filter' : AllCatFilter,
-            'text-filter': TextFilter,
-            'range-filter': RangeFilter,
-            'checkbox-filter': CheckboxFilter
+            FiltersTab,
+            CategoryFilter,
+            TextFilter,
+            RangeFilter,
+            'all-category-filter': AllCatFilter
         }
     }
 </script>

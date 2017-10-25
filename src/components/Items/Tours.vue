@@ -21,7 +21,7 @@
             }
         },
         components: {
-            'tour': Tour
+            Tour
         }
     }
 </script>
