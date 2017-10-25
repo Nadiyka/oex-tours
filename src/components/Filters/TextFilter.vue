@@ -21,7 +21,10 @@
              * Функция запускает фильтр по тексту
              */
             textFilter: function () {
-                this.$emit('filter', this.filter.type, this.filter.property, this.value)
+                this.$emit('filter', this.filter.type, {
+                    inclusion: this.filter.inclusion,
+                    property: this.filter.property,
+                }, this.value)
             }
         }
     }

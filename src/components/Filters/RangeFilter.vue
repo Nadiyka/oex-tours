@@ -97,10 +97,14 @@
              * Функция запускает фильтр по промежутку
              */
             rangeFilter(newRange) {
-              this.$emit('filter', this.filter.type, this.filter.property, {
-                  min: newRange[0],
-                  max: newRange[1]
-              })
+                let range = {
+                    min: newRange[0],
+                    max: newRange[1]
+                };
+              this.$emit('filter', this.filter.type, {
+                  inclusion: this.filter.inclusion,
+                  property: this.filter.property,
+              }, range)
           }
         },
         components: {

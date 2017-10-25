@@ -36,15 +36,15 @@
                     /**
                      * Функция фильтрует по тексту
                      * @param {Object[]} array
-                     * @param {string} property
+                     * @param {Object} field
                      * @param {string} value
                      *
                      * @returns {Object[]}
                      */
-                    text(array, property, value) {
+                    text(array, field, value) {
                         let filtered = [];
                         array.forEach(function (element) {
-                            if (element.hotelsResult[property] && element.hotelsResult[property].toLowerCase().indexOf(value.toLowerCase()) !== -1) {
+                            if (element[field.inclusion][field.property] && element[field.inclusion][field.property].toLowerCase().indexOf(value.toLowerCase()) !== -1) {
                                 filtered.push(element);
                             }
                         });
@@ -53,15 +53,15 @@
                     /**
                      * Функция фильтрует по тексту
                      * @param {Object[]} array
-                     * @param {string} property
+                     * @param {Object} field
                      * @param {Array} values
                      *
                      * @returns {Object[]}
                      */
-                    category(array, property, values) {
+                    category(array, field, values) {
                         let filtered = [];
                         array.forEach(function (element) {
-                            if (!values.length || element.hotelsResult[property] && values.indexOf(element.hotelsResult[property]) !== -1) {
+                            if (!values.length || element[field.inclusion][field.property] && values.indexOf(element[field.inclusion][field.property]) !== -1) {
                                 filtered.push(element);
                             }
                         });
@@ -70,15 +70,15 @@
                     /**
                      * Функция фильтрует по тексту
                      * @param {Object[]} array
-                     * @param {string} property
+                     * @param {Object} field
                      * @param {Array} values
                      *
                      * @returns {Object[]}
                      */
-                    range(array, property, values) {
+                    range(array, field, values) {
                         let filtered = [];
                         array.forEach(function (element) {
-                            if (element.hotelsResult[property] && (element.hotelsResult[property] >= values.min && element.hotelsResult[property] <= values.max)) {
+                            if (element[field.inclusion][field.property] && (element[field.inclusion][field.property] >= values.min && element[field.inclusion][field.property] <= values.max)) {
                                 filtered.push(element);
                             }
                         });
@@ -87,12 +87,12 @@
                     /**
                      * Функция фильтрует по тексту
                      * @param {Object[]} array
-                     * @param {string} property
+                     * @param {Object} field
                      * @param {Array} values
                      *
                      * @returns {Object[]}
                      */
-                    checkbox(array, property, values) {
+                    checkbox(array, field, values) {
                         let filtered = [];
                         array.forEach(function (element) {
 
@@ -100,13 +100,13 @@
                                 filtered.push(element);
                                 return;
                             }
-                            if (!element.hotelsResult[property] || values.length > element.hotelsResult[property].length) {
+                            if (!element[field.inclusion][field.property] || values.length > element[field.inclusion][field.property].length) {
                                 return;
                             }
 
                             let hasAllCriteria = true;
                             values.forEach((value) => {
-                                hasAllCriteria = element.hotelsResult[property].indexOf(value) !== -1;
+                                hasAllCriteria = element[field.inclusion][field.property].indexOf(value) !== -1;
                             });
                             if (hasAllCriteria) {
                                 filtered.push(element);
@@ -116,10 +116,8 @@
                     },
                 },
                 activeFilters: {
-                    text: {},
-                    category: {},
-                    range: {},
-                    checkbox: {}
+                    hotelsResult: {},
+                    aviaResult: {}
                 },
                 filterTypes: [
                     'text',
@@ -144,18 +142,28 @@
                 required: true
             }
         },
+        created() {
+            //типы фильтров
+            for (let filter in this.filterTypes) {
+                if (typeof this.filtersFunction[this.filterTypes[filter]] === 'function'){
+                    for (let resultPart in this.activeFilters) {
+                        this.activeFilters[resultPart][this.filterTypes[filter]] = {}
+                    }
+                }
+            }
+        },
         methods: {
             /**
              * Функция добавляет новый активный фильтр, и запускает фильтрацию
              * @param {string} type
-             * @param {string} property
+             * @param {Object} field
              * @param {string|Array} value
              * @param {boolean} [active]
              */
-            filter(type, property, value, active) {
+            filter(type, field, value, active) {
                 let filteredResults = this.tours.slice();
                 if (this.filterTypes.indexOf(type) !== -1) {
-                    this[type + 'AddFilter'](property, value, active);
+                    this[type + 'AddFilter'](field, value, active);
                     filteredResults = this.applyFilters(filteredResults);
                 }
                 this.$emit('filtered', filteredResults);
@@ -167,28 +175,37 @@
              * @returns {Object[]}
              */
             applyFilters(tours) {
-                for (let filterType in this.activeFilters) {
-                    for (let filterProperty in this.activeFilters[filterType]) {
-                        tours = this.filtersFunction[filterType](tours, filterProperty, this.activeFilters[filterType][filterProperty])
+                try {
+                    for (let resultPart in this.activeFilters) {
+                        for (let filterType in this.activeFilters[resultPart]) {
+                            for (let filterProperty in this.activeFilters[resultPart][filterType]) {
+                                tours = this.filtersFunction[filterType](tours, {
+                                    inclusion: resultPart,
+                                    property: filterProperty
+                                }, this.activeFilters[resultPart][filterType][filterProperty])
+                            }
+                        }
                     }
+                }  catch (err) {
+                    console.log('Не удалось применить фильтры', err);
                 }
                 return tours;
             },
             /**
              * Функция добавляет фильтр по тексту
-             * @param {string} property
+             * @param {Object} field
              * @param {string} value
              */
-            textAddFilter(property, value) {
-                this.activeFilters.text[property] = value;
+            textAddFilter(field, value) {
+                this.activeFilters[field.inclusion].text[field.property] = value;
             },
             /**
              * Функция добавляет фильтр категории
-             * @param {string} property
+             * @param {Object} field
              * @param {string} value
              * @param {boolean} active
              */
-            categoryAddFilter(property, value, active) {
+            categoryAddFilter(field, value, active) {
                 let self = this;
                 if (value === 'all') {
                     let categories = [1, 2, 3, 4, 5, 6];
@@ -201,48 +218,48 @@
 
                 function addCategory(value, active) {
                     let currentPosition;
-                    if (self.activeFilters.category[property]) {
-                        currentPosition = self.activeFilters.category[property].indexOf(value);
+                    if (self.activeFilters[field.inclusion].category[field.property]) {
+                        currentPosition = self.activeFilters[field.inclusion].category[field.property].indexOf(value);
                     } else {
-                        self.activeFilters.category[property] = [];
+                        self.activeFilters[field.inclusion].category[field.property] = [];
                         currentPosition = -1;
                     }
                     if ( active && (currentPosition === -1 || currentPosition === undefined) ) {
-                        self.activeFilters.category[property].push(value);
+                        self.activeFilters[field.inclusion].category[field.property].push(value);
                     }
                     if ( !active && currentPosition !== -1 ) {
-                        self.activeFilters.category[property].splice(currentPosition, 1);
+                        self.activeFilters[field.inclusion].category[field.property].splice(currentPosition, 1);
                     }
                 }
-                this.checkAllCategories(property)
+                this.checkAllCategories(field)
             },
             /**
              * Функция добавляет фильтр категории
-             * @param {string} property
+             * @param {Object} field
              * @param {Array} range
              */
-            rangeAddFilter(property, range) {
-                this.activeFilters.range[property] = range;
+            rangeAddFilter(field, range) {
+                this.activeFilters[field.inclusion].range[field.property] = range;
             },
             /**
              * Функция добавляет фильтр по чекбоксу
-             * @param {string} property
+             * @param {Object} field
              * @param {string} value
              * @param {boolean} active
              */
-            checkboxAddFilter(property, value, active) {
+            checkboxAddFilter(field, value, active) {
                 let currentPosition;
-                if (this.activeFilters.checkbox[property]) {
-                    currentPosition = this.activeFilters.checkbox[property].indexOf(value);
+                if (this.activeFilters[field.inclusion].checkbox[field.property]) {
+                    currentPosition = this.activeFilters[field.inclusion].checkbox[field.property].indexOf(value);
                 } else {
-                    this.activeFilters.checkbox[property] = [];
+                    this.activeFilters[field.inclusion].checkbox[field.property] = [];
                     currentPosition = -1;
                 }
                 if ( active && (currentPosition === -1 || currentPosition === undefined) ) {
-                    this.activeFilters.checkbox[property].push(value);
+                    this.activeFilters[field.inclusion].checkbox[field.property].push(value);
                 }
                 if ( !active && currentPosition !== -1 ) {
-                    this.activeFilters.checkbox[property].splice(currentPosition, 1);
+                    this.activeFilters[field.inclusion].checkbox[field.property].splice(currentPosition, 1);
                 }
             },
             /**
@@ -255,10 +272,10 @@
             },
             /**
              * Функция проверяет, отмечены ли все категории
-             * @param {string} property
+             * @param {Object} field
              */
-            checkAllCategories(property) {
-                if (this.activeFilters.category[property] && this.filterTabs[2].filtersInTab.category.length === this.activeFilters.category[property].length) {
+            checkAllCategories(field) {
+                if (this.activeFilters[field.inclusion].category[field.property] && this.filterTabs[2].filtersInTab.category.length === this.activeFilters[field.inclusion].category[field.property].length) {
                     this.allChecked = true;
                 } else {
                     this.allChecked = false;

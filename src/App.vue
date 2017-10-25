@@ -86,7 +86,8 @@ export default {
                                 type: 'text',
                                 label: 'Название отеля',
                                 property: 'accommodationHotelName',
-                                placeholder: 'Искать отель по названию'
+                                placeholder: 'Искать отель по названию',
+                                inclusion: 'hotelsResult'
                             }
                         ],
                         checkbox: [
@@ -94,7 +95,8 @@ export default {
                                 type: 'checkbox',
                                 label: 'Мгновенное подтверждение',
                                 property: 'accommodationStatus',
-                                value: '1'
+                                value: '1',
+                                inclusion: 'hotelsResult'
                             }
                         ]
                     },
@@ -111,7 +113,8 @@ export default {
                                 property: 'accommodationDistance',
                                 minValue: 0,
                                 maxValue: 100,
-                                unit: 'км'
+                                unit: 'км',
+                                inclusion: 'hotelsResult'
                             }
                         ]
                     }
@@ -127,42 +130,48 @@ export default {
                                 label: '1*',
                                 property: 'accommodationStars',
                                 value: 1,
-                                initActive: false
+                                initActive: false,
+                                inclusion: 'hotelsResult'
                             },
                             {
                                 type: 'category',
                                 label: '2*',
                                 property: 'accommodationStars',
                                 value: 2,
-                                initActive: false
+                                initActive: false,
+                                inclusion: 'hotelsResult'
                             },
                             {
                                 type: 'category',
                                 label: '3*',
                                 property: 'accommodationStars',
                                 value: 3,
-                                initActive: false
+                                initActive: false,
+                                inclusion: 'hotelsResult'
                             },
                             {
                                 type: 'category',
                                 label: '4*',
                                 property: 'accommodationStars',
                                 value: 4,
-                                initActive: false
+                                initActive: false,
+                                inclusion: 'hotelsResult'
                             },
                             {
                                 type: 'category',
                                 label: '5*',
                                 property: 'accommodationStars',
                                 value: 5,
-                                initActive: false
+                                initActive: false,
+                                inclusion: 'hotelsResult'
                             },
                             {
                                 type: 'category',
                                 label: '-',
                                 property: 'accommodationStars',
                                 value: 6,
-                                initActive: true
+                                initActive: true,
+                                inclusion: 'hotelsResult'
                             }
 
                         ]
@@ -276,6 +285,7 @@ export default {
             this.results.filters.forEach((filterTab)=> {
                 let filters = [],
                     isPopular =  filterTab.groupId.indexOf('topGroup') !== -1,
+                    inclusion = 'hotelsResult',
                     tab;
                 filterTab.filters.forEach((filter) => {
                     filters.push({
@@ -283,7 +293,8 @@ export default {
                         label: filter.titleRu ? filter.titleRu : filter.titleEn,
                         property: 'accommodationFacts',
                         value: filter.id,
-                        double: isPopular
+                        double: isPopular,
+                        inclusion
                     })
                 });
                 tab = {
