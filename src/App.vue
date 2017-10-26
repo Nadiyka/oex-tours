@@ -181,8 +181,8 @@ export default {
             map: {
                 markers: [],
                 center: {
-                    lat: 50.100822,
-                    lng: 14.068581
+                    lat: 0,
+                    lng: 0
                 },
                 options: {
                     streetViewControl: false,
@@ -330,6 +330,10 @@ export default {
             self.results.tours = fakeTours.results;
             self.results.filters = fakeTours.filtersTabs;
             self.results.info= fakeTours.search_info;
+            self.map.center = {
+                lat: parseFloat(fakeTours.hotelInfo.cityLatitude),
+                lng: parseFloat(fakeTours.hotelInfo.cityLongitude)
+            };
             self.initAll();
         }
     },

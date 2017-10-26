@@ -38,7 +38,17 @@
             forceAll:{
                 handler(forceAll) {
                     this.checked = forceAll.check;
-                    this.$emit('filter', this.filter.type, this.filter.inclusion, this.filter.property, this.filter.value, this.checked);
+                    this.$emit('filter', this.filter.type,{
+                        inclusion: this.filter.inclusion,
+                        property: this.filter.property,
+                    }, this.filter.value, this.checked);
+                },
+                deep: true
+            },
+            filter:{
+                handler(filter) {
+                    this.checked = filter.initActive;
+                    this.categoryFilter();
                 },
                 deep: true
             }

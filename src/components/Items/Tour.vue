@@ -66,10 +66,9 @@
             </div>
             <div class="tour-summary">
                 <i class="icon-exclamation-circled-inversed"></i>
-                <span class="tour-summary_text">
+                <span class="tour-summary_text" v-if="tour.tourContents">
                    <span class="tour-summary_bold"> В стоимость тура входит:</span>
-                проживание, перелет, трансфер,
-                страховка
+                {{tour.tourContents}}
                 </span>
             </div>
         </div>
@@ -114,8 +113,8 @@
             this.nettoPrice = `${this.numberWithCommas(price)} + ${this.numberWithCommas(markPrice)} = `;
 
 
-            if (!this.tour.hotelsResult.picture.length) {
-                this.tour.hotelsResult.picture = 'https://www.b17.ru/foto/uploaded/38dc5abadad52dc8367d506e9424a887.jpg'
+            if (!this.tour.hotelsResult.picture || !this.tour.hotelsResult.picture.length) {
+                this.tour.hotelsResult.picture = '/images/empty.jpg'
             }
 
             this.direction = this.tour.transfersResult.direction == 'Return' ? 'туда - обратно' : (this.tour.transfersResult.direction == 'ToAirport' ? 'отель - аэропорт' : 'аэропорт - отель');
